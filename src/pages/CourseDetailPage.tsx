@@ -73,37 +73,13 @@ export const CourseDetailPage: React.FC = () => {
           email: 'blom.orkney.northwest@gmail.com',
           phone: '0731518407',
           availableDates: [
-            'April/May 2026 (27-30 Apr & 2 May) (Ultimate Acrylic Nail Course: Beginners)',
-            '20 May 2026 (Aquarelle Art Workshop: Watercolor Art)',
-            '16 June 2026 (3D Flower Workshop)',
-            '6–10 July 2026 (Ultimate Acrylic Nail Course: Beginners)',
-            '21–24 July 2026 (Rubberbase Basic Gel Course)',
-            '4 August 2026 (Gelpolish Advance Class - Art)',
-            '17–21 August 2026 (Ultimate Acrylic Nail Course: Beginners)',
-            '14–17 September 2026 (Rubberbase Gel Basic Gel Course)'
+            '12–16 October 2026',
+            '2–6 November 2026',
+            '30 November–4 December 2026'
           ],
-          trainingSchedule: [
-            {
-              title: 'April/May 2026',
-              items: [
-                '27 April 2026',
-                '28 April 2026',
-                '29 April 2026',
-                '30 April 2026',
-                '2 May 2026'
-              ]
-            }
-          ],
-          scheduleImages: [
-            {
-              src: 'https://res.cloudinary.com/dnlgohkcc/image/upload/v1776768138/WhatsApp_Image_2026-04-20_at_08.40.34_muq7lz.jpg',
-              alt: 'All Course Dates – Yolanda Botha Orkney'
-            },
-            {
-              src: 'https://res.cloudinary.com/dnlgohkcc/image/upload/v1776768467/WhatsApp_Image_2026-04-20_at_08.41.50_kz7sex.jpg',
-              alt: 'April Course Dates – Yolanda Botha Orkney'
-            }
-          ]
+          // Empty array hides the timetable card; omitting it would fall back to
+          // the studio-wide August/September block.
+          trainingSchedule: []
         },
         {
           name: 'Rochelle Ras',
@@ -295,8 +271,8 @@ export const CourseDetailPage: React.FC = () => {
           email: 'blom.orkney.northwest@gmail.com',
           phone: '0731518407',
           availableDates: [
-            'July 2026 (21–24 Jul)',
-            'September 2026 (14–17 Sep)'
+            '14–16 September 2026',
+            '29–31 October 2026'
           ],
           trainingSchedule: [
             {
@@ -304,8 +280,7 @@ export const CourseDetailPage: React.FC = () => {
               items: [
                 'Day 1: 09:00 – 16:00',
                 'Day 2: 09:00 – 16:00',
-                'Day 3: 09:00 – 16:00',
-                'Day 4: 09:00 – 16:00'
+                'Day 3: 09:00 – 16:00'
               ]
             }
           ]

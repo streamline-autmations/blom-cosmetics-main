@@ -18,6 +18,25 @@ body {
   background-color: #ffffff;
 }
 
+/* ========================================
+   MOBILE WIDTH GUARD - DO NOT REMOVE
+   Nothing may make the page wider than the screen. On phones, horizontal
+   overflow makes the browser zoom the whole site out. Content that doesn't
+   fit must scroll inside its own container (see ScrollableTabRow).
+   `clip` (not `hidden`) so the sticky header keeps working.
+   ======================================== */
+html,
+body {
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+@supports not (overflow-x: clip) {
+  body {
+    overflow-x: hidden;
+  }
+}
+
 input,
 textarea,
 select,

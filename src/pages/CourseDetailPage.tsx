@@ -5,6 +5,7 @@ import { Footer } from '../components/layout/Footer';
 import { Container } from '../components/layout/Container';
 import { Button } from '../components/ui/Button';
 import { ClickableContact } from '../components/ui/ClickableContact';
+import { ScrollableTabRow } from '../components/ui/ScrollableTabRow';
 import { supabase } from '../lib/supabase';
 import { 
   Clock, 
@@ -1356,7 +1357,11 @@ export const CourseDetailPage: React.FC = () => {
 
               {/* Instructor Tabs - Only show if there are multiple instructors */}
               {(course as any).instructors && (course as any).instructors.length > 1 && (
-                <div className="flex justify-center gap-4 mb-8">
+                <ScrollableTabRow
+                  className="mb-8"
+                  activeIndex={selectedInstructorIndex}
+                  hint={`Swipe to see all ${(course as any).instructors.length} instructors`}
+                >
                   {(course as any).instructors.map((inst: any, idx: number) => (
                     <button
                       key={idx}
@@ -1365,7 +1370,8 @@ export const CourseDetailPage: React.FC = () => {
                         setSelectedInstructor(`${inst.name} - ${inst.location}`);
                         setSelectedDate('');
                       }}
-                      className={`px-6 py-3 rounded-full font-semibold transition-all duration-300 ${
+                      aria-pressed={selectedInstructorIndex === idx}
+                      className={`px-5 py-2.5 md:px-6 md:py-3 rounded-full font-semibold transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-400 focus-visible:ring-offset-2 ${
                         selectedInstructorIndex === idx
                           ? 'bg-pink-400 text-white shadow-lg'
                           : 'bg-white text-gray-700 border-2 border-gray-200 hover:border-pink-400'
@@ -1374,7 +1380,7 @@ export const CourseDetailPage: React.FC = () => {
                       {inst.name}
                     </button>
                   ))}
-                </div>
+                </ScrollableTabRow>
               )}
 
               <div className="bg-white rounded-3xl p-8 md:p-12 shadow-xl">

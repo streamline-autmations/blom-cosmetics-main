@@ -60,6 +60,7 @@ Do not invent project facts that are already documented. If docs conflict, prefe
 - Use environment variable names only in docs and config; do not copy values from `.env`, `.env.production`, or `ENVIRONMENT_VARIABLES.md`.
 - Treat database writes, migrations, payment webhooks, production n8n pushes, and live credential changes as high risk and require explicit user approval when they affect production.
 - For UI work, keep the existing BLOM visual language, responsive behavior, and accessibility expectations.
+- Mobile width is a hard rule: nothing may make the page wider than the screen (it makes phones zoom the whole site out). Never remove the `html, body { overflow-x: clip }` guard in `src/index.css`. Rows that can grow (tabs, pills, chips, instructor or date lists) must scroll inside their own container, using `src/components/ui/ScrollableTabRow.tsx` for tab and pill rows. Verify UI changes at 375–390px, where `document.documentElement.scrollWidth` must equal the viewport width. See `CLAUDE.md`.
 - For n8n work, use the `n8n-architect` skill and backend-resolved workspace state; never hand-edit n8n manager secrets or raw config.
 - After code changes that affect cloud cost, infrastructure, Supabase, APIs, bundles, caching, automation, or external integrations, run the `cost-review` skill before finishing.
 

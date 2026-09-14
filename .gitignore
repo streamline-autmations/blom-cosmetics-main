@@ -36,3 +36,6 @@ dist-ssr
 .claude/settings.local.json
 nul
 tsconfig.tsbuildinfo
+
+# Local incident notes - contain customer data, never commit
+INCIDENT_*.md

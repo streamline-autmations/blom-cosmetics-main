@@ -94,6 +94,19 @@ export const CourseDetailPage: React.FC = () => {
             '25–29 January 2027',
             '15–19 February 2027'
           ]
+        },
+        {
+          name: 'Natasha',
+          image: 'https://res.cloudinary.com/wbmx31qv/image/upload/v1789373472/ChatGPT_Image_Sep_14_2026_10_11_00_AM.png',
+          bio: 'Our Pretoria, Gauteng Area Mentor. Natasha brings passion, knowledge and a love for the nail industry, and specialises in helping students master acrylics with confidence.',
+          location: 'Pretoria, Gauteng',
+          phone: '0714625287',
+          availableDates: [
+            '5–9 October 2026'
+          ],
+          // Empty array hides the timetable card; omitting it would fall back to
+          // the studio-wide August/September block.
+          trainingSchedule: []
         }
       ],
       about: [
@@ -933,10 +946,13 @@ export const CourseDetailPage: React.FC = () => {
     if (course.packages.length === 1 && !selectedPackage) {
       setSelectedPackage(course.packages[0].name);
     }
-    if (course.availableDates.length === 1 && !selectedDate) {
-      setSelectedDate(course.availableDates[0]);
+    // Use the selected instructor's dates (same source as the Date dropdown);
+    // the course-level list would pre-fill a date that instructor doesn't offer.
+    const dates: string[] = (course as any).instructors?.[selectedInstructorIndex]?.availableDates ?? course.availableDates;
+    if (dates.length === 1 && !selectedDate) {
+      setSelectedDate(dates[0]);
     }
-  }, [course, selectedPackage, selectedDate]);
+  }, [course, selectedPackage, selectedDate, selectedInstructorIndex]);
 
   const toggleAccordion = (index: number) => {
     setExpandedAccordion(expandedAccordion === index ? null : index);

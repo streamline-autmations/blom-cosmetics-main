@@ -115,6 +115,7 @@ const PF_BASE = PF_ENV === 'sandbox' ? 'https://sandbox.payfast.co.za' : 'https:
 const N8N_WEBHOOK_URL = 'https://dockerfile-1n82.onrender.com/webhook/notify-order'
 const N8N_ORKNEY_WEBHOOK_URL = 'https://dockerfile-1n82.onrender.com/webhook/orkney-course-booking'
 const N8N_ROCHELLE_WEBHOOK_URL = 'https://dockerfile-1n82.onrender.com/webhook/rochelle-course-booking'
+const N8N_NATASHA_WEBHOOK_URL = 'https://dockerfile-1n82.onrender.com/webhook/natasha-course-booking'
 
 function encPF(v: unknown) {
   return encodeURIComponent(String(v ?? '').trim())
@@ -434,6 +435,29 @@ export const handler: Handler = async (event) => {
             console.log('✅ Rochelle booking notification sent')
           } catch (e) {
             console.error('Rochelle notification error:', e)
+          }
+        }
+
+        // Notify Natasha (Pretoria) when a booking is for her
+        if (String(cp.instructor || '').toLowerCase().includes('natasha')) {
+          try {
+            await fetch(N8N_NATASHA_WEBHOOK_URL, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                buyer_name: buyerName,
+                buyer_email: buyerEmail,
+                buyer_phone: buyerPhone,
+                course_title: String(cp.course_title || courseSlug),
+                selected_package: String(cp.selected_package || ''),
+                selected_date: String(cp.selected_date || ''),
+                amount_paid: data.amount,
+                instructor: String(cp.instructor || '')
+              })
+            })
+            console.log('✅ Natasha booking notification sent')
+          } catch (e) {
+            console.error('Natasha notification error:', e)
           }
         }
       }

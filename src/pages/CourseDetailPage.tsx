@@ -97,10 +97,11 @@ export const CourseDetailPage: React.FC = () => {
           ]
         },
         {
-          name: 'Natasha',
+          name: 'Natasha Du Toit',
           image: 'https://res.cloudinary.com/wbmx31qv/image/upload/v1789373472/ChatGPT_Image_Sep_14_2026_10_11_00_AM.png',
           bio: 'Our Pretoria, Gauteng Area Mentor. Natasha brings passion, knowledge and a love for the nail industry, and specialises in helping students master acrylics with confidence.',
           location: 'Pretoria, Gauteng',
+          email: 'natashatooshterblanche@gmail.com',
           phone: '0714625287',
           availableDates: [
             '5–9 October 2026'

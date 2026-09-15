@@ -26,6 +26,14 @@ const courses = [
     image: 'https://res.cloudinary.com/dnlgohkcc/image/upload/f_auto,q_auto,w_1000,c_limit/v1775453928/WhatsApp_Image_2026-04-03_at_12.34.07_uelxcc.jpg',
     className: 'academy-course--compact',
   },
+  {
+    title: 'Bridal and Lace Nail Art',
+    meta: '10 Oct 2026',
+    location: 'Randfontein',
+    href: '/courses/bridal-and-lace-nail-art-workshop',
+    image: 'https://res.cloudinary.com/hmvetruz/image/upload/f_auto,q_auto,w_1400,c_limit/v1789475340/courses/bridal-and-lace-nail-art-workshop/banner_w2ap6a.png',
+    className: 'academy-course--wide',
+  },
 ];
 
 const responsiveSrcSet = (src: string) =>
@@ -51,7 +59,7 @@ export const MasterYourCraft: React.FC = () => (
             <img
               src={course.image}
               srcSet={responsiveSrcSet(course.image)}
-              sizes={index === 0
+              sizes={index === 0 || course.className === 'academy-course--wide'
                 ? '(max-width: 860px) 92vw, 58vw'
                 : '(max-width: 860px) 92vw, 28vw'}
               alt={course.title}

@@ -59,7 +59,7 @@ export const CheckoutPage: React.FC = () => {
   const [isWishlisted, setIsWishlisted] = useState<{[key: string]: boolean}>({});
   
   const uberEnabled = useUberDeliveryFlag();
-  const [shippingMethod, setShippingMethod] = useState<'store-pickup' | 'door-to-door' | 'uber-same-day'>('door-to-door');
+  const [shippingMethod, setShippingMethod] = useState<'store-pickup' | 'own-courier' | 'door-to-door' | 'uber-same-day'>('door-to-door');
   const [uberQuote, setUberQuote] = useState<{
     loading: boolean;
     available: boolean;
@@ -429,7 +429,7 @@ export const CheckoutPage: React.FC = () => {
       if (!addressValidation.isValid) {
         errors.address = addressValidation.errors;
       }
-    } else if (shippingMethod === 'store-pickup') {
+    } else if (shippingMethod === 'store-pickup' || shippingMethod === 'own-courier') {
       return validateAddress(deliveryAddress);
     }
 
@@ -1008,6 +1008,13 @@ export const CheckoutPage: React.FC = () => {
       return 0;
     }
 
+    // 1b. Own Courier Collection — customer arranges their own courier to
+    // collect from BLOM HQ, we still pack the order, so a flat handling fee applies.
+    if (shippingMethod === 'own-courier') {
+      if (hasFurniture) return 500;
+      return 50;
+    }
+
     // 2. Uber Same-Day
     if (shippingMethod === 'uber-same-day') {
       return uberQuote?.fee ?? 0;
@@ -1168,6 +1175,40 @@ export const CheckoutPage: React.FC = () => {
                                 {hasFurniture && (
                                   <span className="inline-block mt-2 px-2 py-0.5 bg-gray-100 text-gray-700 rounded-full text-xs font-medium">Furniture Collection Fee</span>
                                 )}
+                              </div>
+                            </div>
+                          </label>
+
+                          {/* Own Courier Collection */}
+                          <label
+                            className={`block p-4 border-2 rounded-lg cursor-pointer transition-all ${
+                              shippingMethod === 'own-courier'
+                                ? 'border-gray-900 bg-gray-50'
+                                : 'border-gray-200 hover:border-gray-300'
+                            }`}
+                          >
+                            <div className="flex items-start gap-3">
+                              <input
+                                type="radio"
+                                name="shippingMethod"
+                                value="own-courier"
+                                checked={shippingMethod === 'own-courier'}
+                                onChange={(e) => setShippingMethod(e.target.value as any)}
+                                className="mt-1"
+                              />
+                              <div className="flex-1">
+                                <div className="flex items-center justify-between mb-1">
+                                  <span className="font-semibold text-gray-900">My Own Courier</span>
+                                  <span className="text-lg font-bold text-gray-900">
+                                    {hasFurniture ? 'R 500.00' : 'R 50.00'}
+                                  </span>
+                                </div>
+                                <p className="text-sm text-gray-600">
+                                  We'll pack your order and have it ready for your courier to collect from BLOM HQ, Randfontein.
+                                </p>
+                                <span className="inline-block mt-2 px-2 py-0.5 bg-gray-100 text-gray-700 rounded-full text-xs font-medium">
+                                  {hasFurniture ? 'Furniture Packing Fee' : 'Packing & Handling Fee'}
+                                </span>
                               </div>
                             </div>
                           </label>
@@ -1533,6 +1574,32 @@ export const CheckoutPage: React.FC = () => {
                           </p>
                         </div>
                       </div>
+                    ) : shippingMethod === 'own-courier' ? (
+                      <div>
+                        <div className="flex items-center justify-between mb-2 sm:mb-3">
+                          <h3 className="font-medium text-sm sm:text-base">Own Courier Collection</h3>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => setStep('shipping')}
+                            className="text-xs sm:text-sm"
+                          >
+                            <Edit className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
+                            Edit
+                          </Button>
+                        </div>
+                        <div className="bg-gray-50 rounded-lg p-3 sm:p-4">
+                          <p className="font-medium text-sm sm:text-base">Packed and ready for your courier at BLOM HQ, Randfontein</p>
+                          <p className="mt-2 text-xs sm:text-sm text-gray-600">
+                            <Mail className="h-3 w-3 sm:h-4 sm:w-4 inline mr-1" />
+                            {shippingInfo.email}
+                          </p>
+                          <p className="text-xs sm:text-sm text-gray-600">
+                            <Phone className="h-3 w-3 sm:h-4 sm:w-4 inline mr-1" />
+                            {shippingInfo.phone}
+                          </p>
+                        </div>
+                      </div>
                     ) : (
                       <div>
                         <div className="flex items-center justify-between mb-2 sm:mb-3">
@@ -1780,7 +1847,7 @@ export const CheckoutPage: React.FC = () => {
                       <span>{formatPrice(cartState.subtotal)}</span>
                     </div>
                     <div className="flex justify-between text-sm">
-                      <span>Shipping:</span>
+                      <span>{shippingMethod === 'own-courier' ? 'Packing & Handling:' : 'Shipping:'}</span>
                       <span className={shippingCost === 0 ? 'text-green-600 font-medium' : ''}>
                         {hasFurniture && shippingMethod === 'door-to-door'
                           ? 'Calculated Later'

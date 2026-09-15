@@ -96,8 +96,9 @@ export const handler = async (event: any) => {
        text(`${addr.city || ''} ${addr.code || ''}`, left + 200, y - 27)
        text(addr.country || "", left + 200, y - 39)
     } else {
-       text("Collection From:", left + 200, y, 10, true)
-       text("BLOM Cosmetics HQ", left + 200, y - 15)
+       const isCourierCollection = String(order.collection_location || '').toLowerCase().includes('courier')
+       text(isCourierCollection ? "Courier Collection:" : "Collection From:", left + 200, y, 10, true)
+       text(order.collection_location || "BLOM Cosmetics HQ", left + 200, y - 15)
     }
 
     y -= 70

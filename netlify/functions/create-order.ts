@@ -338,11 +338,14 @@ export const handler: Handler = async (event) => {
     }
 
     // --- FIX 1 & 2: Normalize Fulfillment Method ---
-    // The checkout sends 'shipping.method' as 'store-pickup', 'door-to-door', or 'uber-same-day'
+    // The checkout sends 'shipping.method' as 'store-pickup', 'own-courier', 'door-to-door', or 'uber-same-day'
     // We need to map this to 'collection' or 'delivery' for the DB
     const rawMethod = body.shipping?.method || body.fulfillment?.method || 'delivery';
     const isUberSameDay = rawMethod === 'uber-same-day';
-    const fulfillmentMethod = (rawMethod === 'store-pickup' || rawMethod === 'collection') ? 'collection' : 'delivery';
+    // 'own-courier' = customer arranges their own courier to collect from BLOM HQ;
+    // we still pack it, so it's a collection fulfillment with a flat handling fee.
+    const isOwnCourier = rawMethod === 'own-courier';
+    const fulfillmentMethod = (rawMethod === 'store-pickup' || rawMethod === 'own-courier' || rawMethod === 'collection') ? 'collection' : 'delivery';
 
     // Select the correct address object
     // If delivery (including uber), use shipping address. If collection, it is null.
@@ -353,7 +356,9 @@ export const handler: Handler = async (event) => {
     const deliveryAddress = rawDeliveryAddress && body.uber?.quoteId
       ? { ...rawDeliveryAddress, uber_quote_id: body.uber.quoteId }
       : rawDeliveryAddress;
-    const collectionLocation = fulfillmentMethod === 'collection' ? 'BLOM HQ' : null;
+    const collectionLocation = fulfillmentMethod === 'collection'
+      ? (isOwnCourier ? 'Courier Collection – BLOM HQ, Randfontein' : 'BLOM HQ')
+      : null;
 
     const hasFurniture = validItems.some((it) => {
       const name = String(it.resolved_product?.name || it.base_name || '').toLowerCase()
@@ -372,7 +377,11 @@ export const handler: Handler = async (event) => {
 
     let shippingCents = 0
     if (fulfillmentMethod === 'collection') {
-      shippingCents = hasFurniture ? 500 * 100 : 0
+      if (isOwnCourier) {
+        shippingCents = hasFurniture ? 500 * 100 : 50 * 100
+      } else {
+        shippingCents = hasFurniture ? 500 * 100 : 0
+      }
     } else if (isUberSameDay) {
       // Trust the quoted fee sent from the frontend (already validated server-side by Uber)
       shippingCents = Math.max(0, Math.round(Number(body.uber?.feeCents ?? 0)))

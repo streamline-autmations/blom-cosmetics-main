@@ -443,6 +443,99 @@ export const CourseDetailPage: React.FC = () => {
         }
       ]
     },
+    'bridal-and-lace-nail-art-workshop': {
+      id: 'be26f87c-0dde-46b0-9c0e-4218f366fec0', // Matches Store `courses` row
+      sku: 'SKU_BRIDAL_LACE_WORKSHOP',
+      title: 'Bridal and Lace Nail Art Workshop',
+      description: 'Master the art of bridal nails and delicate lace designs in a hands-on, one-day workshop in Randfontein. Kit included.',
+      // Nails-only crops of the flyer, so the flyer's own lettering doesn't clash with the page title.
+      heroImage: 'https://res.cloudinary.com/hmvetruz/image/upload/c_crop,x_0,y_500,w_1024,h_360/f_auto,q_auto/v1789466319/courses/bridal-and-lace-nail-art-workshop/1_docwzm.png',
+      mobileHeroImage: 'https://res.cloudinary.com/hmvetruz/image/upload/c_crop,x_330,y_500,w_400,h_440/f_auto,q_auto/v1789466319/courses/bridal-and-lace-nail-art-workshop/1_docwzm.png',
+      heroBgColor: '#F3E4DC',
+      duration: '1 Day Workshop',
+      price: 'R1,850',
+      numericPrice: 1850,
+      // No deposit: the workshop is paid in full to secure a spot.
+      depositAmount: 0,
+      isOnline: false,
+      location: '34 Horingbek Avenue, Helikonpark, Randfontein, Gauteng',
+      instructor: {
+        name: 'Yolanda Botha',
+        image: 'https://res.cloudinary.com/dy1gw7dr2/image/upload/q_auto/f_auto/v1778573976/WhatsApp_Image_2026-05-12_at_09.20.39_kercfw.jpg',
+        bio: 'Professional nail artist with years of experience in nail artistry. Yolanda specialises in teaching proper techniques and helping students build confidence in their nail artistry skills.'
+      },
+      instructors: [
+        {
+          name: 'Yolanda Botha',
+          image: 'https://res.cloudinary.com/dy1gw7dr2/image/upload/q_auto/f_auto/v1778573976/WhatsApp_Image_2026-05-12_at_09.20.39_kercfw.jpg',
+          bio: 'Professional nail artist with years of experience in nail artistry. Yolanda specialises in teaching proper techniques and helping students build confidence in their nail artistry skills.',
+          location: '34 Horingbek Avenue, Helikonpark, Randfontein, Gauteng',
+          email: 'blom.orkney.northwest@gmail.com',
+          phone: '0731518407',
+          availableDates: [
+            '10 October 2026'
+          ],
+          trainingSchedule: [
+            {
+              title: '10 October 2026',
+              items: [
+                'Workshop starts at 08:30'
+              ]
+            }
+          ]
+        }
+      ],
+      about: [
+        'Turn art into opportunity. This hands-on workshop teaches you how to create timeless bridal nail designs and delicate lace detail, using elegant techniques you can offer your clients straight away.',
+        'Yolanda guides you through every design step by step with practical training and expert guidance, so you leave with new skills, beautiful techniques and the confidence to grow your bridal nail services.'
+      ],
+      packages: [
+        {
+          name: 'Workshop',
+          price: 'R1,850',
+          kitValue: 'Included',
+          features: [
+            'Kit included',
+            'Hands-on practical training',
+            'Expert guidance from Yolanda Botha',
+            'Bridal nail art designs',
+            'Delicate lace nail art techniques'
+          ]
+        }
+      ],
+      availableDates: [
+        '10 October 2026'
+      ],
+      thingsToBring: [],
+      trainingSchedule: [],
+      studentDiscount: [],
+      accordionData: [
+        {
+          title: 'BRIDAL NAIL ART',
+          content: [
+            'Timeless bridal nail designs',
+            'Elegant techniques for a refined finish',
+            'Designing for brides and special occasions'
+          ]
+        },
+        {
+          title: 'LACE NAIL ART',
+          content: [
+            'Delicate lace designs',
+            'Fine detail work',
+            'Combining lace with bridal accents'
+          ]
+        },
+        {
+          title: 'GROW YOUR SKILLS',
+          content: [
+            'Practical, hands-on training',
+            'Expert guidance throughout the day',
+            'Turning your nail art into opportunity'
+          ]
+        }
+      ]
+    },
     'blom-flower-watercolor-workshop': {
       id: '7c5276c1-9207-4653-89c3-bb4c675db5e2', // Matches Academy "Blom Flower Workshop"
       sku: 'SKU_FLOWER_WORKSHOP',
@@ -930,7 +1023,8 @@ export const CourseDetailPage: React.FC = () => {
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   // In-person courses: the buyer chooses to pay the deposit (secure spot) or the full amount up front.
-  const [paymentOption, setPaymentOption] = useState<'deposit' | 'full'>('deposit');
+  // Courses without a deposit (depositAmount: 0) are always paid in full.
+  const [paymentOption, setPaymentOption] = useState<'deposit' | 'full'>(depositAmount > 0 ? 'deposit' : 'full');
   // Payment provider chooser (PayFast vs Payflex) shown after the buyer confirms their booking.
   const [showPaymentModal, setShowPaymentModal] = useState(false);
 
@@ -1634,6 +1728,8 @@ export const CourseDetailPage: React.FC = () => {
                         <div className="inline-flex items-center gap-2 bg-amber-100 text-amber-800 text-sm font-bold px-4 py-1.5 rounded-full uppercase">
                           No Kit Included
                         </div>
+                      ) : pkg.kitValue === 'Included' ? (
+                        <div className="text-sm font-semibold text-gray-500 uppercase">Kit Included</div>
                       ) : (
                         <div className="text-sm font-semibold text-gray-500 uppercase">Kit Value: {pkg.kitValue}</div>
                       )}
@@ -1705,8 +1801,16 @@ export const CourseDetailPage: React.FC = () => {
                   </div>
                   <h3 className="text-xl font-bold text-gray-900 mb-4 uppercase tracking-wide">{course.isOnline ? 'Payment' : 'Payment Options'}</h3>
                   <p className="text-gray-800 text-base md:text-lg leading-relaxed">
-                    {course.isOnline ? 'Full payment required' : `R${depositAmount.toLocaleString('en-ZA')} deposit to secure your spot, or pay in full`}<br />
-                    <span className="text-base text-gray-700">{course.isOnline ? 'Instant access after payment' : 'Choose deposit or full payment at checkout'}</span>
+                    {course.isOnline
+                      ? 'Full payment required'
+                      : depositAmount > 0
+                        ? `R${depositAmount.toLocaleString('en-ZA')} deposit to secure your spot, or pay in full`
+                        : `Pay ${course.price} in full to secure your spot`}<br />
+                    <span className="text-base text-gray-700">
+                      {course.isOnline
+                        ? 'Instant access after payment'
+                        : depositAmount > 0 ? 'Choose deposit or full payment at checkout' : 'PayFast or Payflex accepted'}
+                    </span>
                   </p>
                 </div>
 
@@ -2079,8 +2183,8 @@ export const CourseDetailPage: React.FC = () => {
                       </div>
                     </div>
 
-                    {/* Payment Option - deposit or full (in-person courses only) */}
-                    {!course.isOnline && (
+                    {/* Payment Option - deposit or full (in-person courses with a deposit only) */}
+                    {!course.isOnline && depositAmount > 0 && (
                       <div>
                         <label className="block text-sm font-semibold text-gray-800 mb-3">
                           Payment Option <span className="text-red-500">*</span>

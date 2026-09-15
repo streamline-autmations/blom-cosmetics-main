@@ -27,6 +27,16 @@ const CoursesPage: React.FC = () => {
       duration: '3–4 Full Days',
       location: 'Randfontein & Orkney',
       priceLabel: 'From R4,819'
+    },
+    {
+      id: 7,
+      slug: 'bridal-and-lace-nail-art-workshop',
+      title: 'Bridal and Lace Nail Art Workshop',
+      description: 'Master bridal nails and delicate lace designs with Yolanda in a hands-on, one-day workshop in Randfontein. Kit included.',
+      image: 'https://res.cloudinary.com/hmvetruz/image/upload/c_crop,x_0,y_505,w_1024,h_768/f_auto,q_auto/v1789466319/courses/bridal-and-lace-nail-art-workshop/1_docwzm.png',
+      duration: '10 October 2026 · 08:30',
+      location: 'Randfontein',
+      priceLabel: 'R1,850'
     }
   ];
 
@@ -151,8 +161,16 @@ const CoursesPage: React.FC = () => {
 
             <div className="flex justify-center">
               <div className="grid md:grid-cols-2 gap-8 max-w-4xl">
-                {inPersonCourses.map((course) => (
-                <Card key={course.id} className="course-card group overflow-hidden rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 bg-white">
+                {inPersonCourses.map((course, index) => (
+                <Card
+                  key={course.id}
+                  className={`course-card group overflow-hidden rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 bg-white ${
+                    // Centre a lone last card instead of leaving it stranded in the left column.
+                    inPersonCourses.length % 2 === 1 && index === inPersonCourses.length - 1
+                      ? 'md:col-span-2 md:justify-self-center md:w-[calc(50%-1rem)]'
+                      : ''
+                  }`}
+                >
                   {/* Image with Shimmer */}
                   <div className="relative aspect-[4/3] overflow-hidden">
                     <img

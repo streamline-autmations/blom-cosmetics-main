@@ -392,8 +392,9 @@ export const handler: Handler = async (event) => {
           console.error('Course enrollment error:', courseSlug, e)
         }
 
-        // Notify Yolanda at Blom Orkney when a booking is for her location
-        if (String(cp.instructor || '').toLowerCase().includes('orkney')) {
+        // Notify Yolanda for her Orkney bookings and her workshops at other venues (e.g. Randfontein)
+        const instructorLower = String(cp.instructor || '').toLowerCase()
+        if (instructorLower.includes('orkney') || instructorLower.includes('yolanda')) {
           try {
             await fetch(N8N_ORKNEY_WEBHOOK_URL, {
               method: 'POST',

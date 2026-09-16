@@ -1,6 +1,7 @@
 import type { Handler } from '@netlify/functions';
 import { createClient } from '@supabase/supabase-js';
 import { enrollCourse } from './_lib/enroll-helper';
+import { notifyInstructor } from './_lib/instructor-notify';
 import { WOMENS_DAY_PROMOTION_CODE } from '../../src/lib/womensDayPromotion';
 
 // Called from CheckoutSuccess when the user lands back from Payflex.
@@ -168,7 +169,7 @@ async function runFulfilment(order: any) {
   try {
     const { data: cps } = await supabase
       .from('course_purchases')
-      .select('course_slug,invitation_status,buyer_email,buyer_name,buyer_phone')
+      .select('course_slug,invitation_status,buyer_email,buyer_name,buyer_phone,instructor,course_title,selected_package,selected_date')
       .eq('order_id', orderId);
     if (Array.isArray(cps) && cps.length > 0) {
       for (const cp of cps) {
@@ -177,9 +178,24 @@ async function runFulfilment(order: any) {
         const buyerEmail = String(order.buyer_email || cp.buyer_email || '').trim();
         const courseSlug = String(cp.course_slug || '');
         if (!buyerEmail || !courseSlug) continue;
+        const buyerName = String(order.buyer_name || cp.buyer_name || '').trim();
+        const buyerPhone = String(order.buyer_phone || cp.buyer_phone || '').trim();
         try {
-          await enrollCourse({ orderId, courseSlug, buyerEmail, buyerName: order.buyer_name || cp.buyer_name, buyerPhone: order.buyer_phone || cp.buyer_phone });
+          await enrollCourse({ orderId, courseSlug, buyerEmail, buyerName, buyerPhone });
         } catch (e) { console.error('Course enroll error:', courseSlug, e); }
+
+        // Notify the instructor's own n8n workflow, when they have one.
+        // Shared with payfast-itn.ts so both payment providers behave identically.
+        await notifyInstructor({
+          instructor: String(cp.instructor || ''),
+          buyerName,
+          buyerEmail,
+          buyerPhone,
+          courseTitle: String(cp.course_title || courseSlug),
+          selectedPackage: String(cp.selected_package || ''),
+          selectedDate: String(cp.selected_date || ''),
+          amountPaid: order.total || (order.total_cents ? order.total_cents / 100 : 0)
+        });
       }
     }
   } catch (e) { console.error('Course purchases error:', e); }

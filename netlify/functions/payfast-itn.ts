@@ -2,6 +2,7 @@ import type { Handler } from '@netlify/functions'
 import { WOMENS_DAY_PROMOTION_CODE } from '../../src/lib/womensDayPromotion'
 import crypto from 'crypto'
 import { enrollCourse } from './_lib/enroll-helper'
+import { notifyInstructor } from './_lib/instructor-notify'
 
 async function bookUberDelivery(quoteId: string, order: any) {
   const clientId = process.env.UBER_DIRECT_CLIENT_ID
@@ -113,9 +114,6 @@ const PF_PASSPHRASE =
 const SITE = process.env.SITE_URL || process.env.SITE_BASE_URL || 'https://blom-cosmetics.co.za'
 const PF_BASE = PF_ENV === 'sandbox' ? 'https://sandbox.payfast.co.za' : 'https://www.payfast.co.za'
 const N8N_WEBHOOK_URL = 'https://dockerfile-1n82.onrender.com/webhook/notify-order'
-const N8N_ORKNEY_WEBHOOK_URL = 'https://dockerfile-1n82.onrender.com/webhook/orkney-course-booking'
-const N8N_ROCHELLE_WEBHOOK_URL = 'https://dockerfile-1n82.onrender.com/webhook/rochelle-course-booking'
-const N8N_NATASHA_WEBHOOK_URL = 'https://dockerfile-1n82.onrender.com/webhook/natasha-course-booking'
 
 function encPF(v: unknown) {
   return encodeURIComponent(String(v ?? '').trim())
@@ -252,6 +250,12 @@ export const handler: Handler = async (event) => {
 
     // 4. Update Status to PAID (if not already)
     const paidAt = order.paid_at || new Date().toISOString()
+    // PayFast retries an ITN until it gets a 200. The course loop below runs on every
+    // delivery (it is deliberately outside this block so a failed invite can be retried),
+    // but the instructor notification must fire only on the actual transition to paid —
+    // in-person bookings never reach invitation_status 'sent', so nothing else would
+    // stop a retry from emailing the instructor a second time.
+    const wasAlreadyPaid = order.status === 'paid'
     if (order.status !== 'paid') {
       console.log(`Processing Payment for ${order.id}...`)
 
@@ -392,75 +396,19 @@ export const handler: Handler = async (event) => {
           console.error('Course enrollment error:', courseSlug, e)
         }
 
-        // Notify Yolanda for her Orkney bookings and her workshops at other venues (e.g. Randfontein)
-        const instructorLower = String(cp.instructor || '').toLowerCase()
-        if (instructorLower.includes('orkney') || instructorLower.includes('yolanda')) {
-          try {
-            await fetch(N8N_ORKNEY_WEBHOOK_URL, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                buyer_name: buyerName,
-                buyer_email: buyerEmail,
-                buyer_phone: buyerPhone,
-                course_title: String(cp.course_title || courseSlug),
-                selected_package: String(cp.selected_package || ''),
-                selected_date: String(cp.selected_date || ''),
-                amount_paid: data.amount,
-                instructor: String(cp.instructor || '')
-              })
-            })
-            console.log('✅ Orkney booking notification sent')
-          } catch (e) {
-            console.error('Orkney notification error:', e)
-          }
-        }
-
-        // Notify Rochelle when a booking is for her
-        if (String(cp.instructor || '').toLowerCase().includes('rochelle')) {
-          try {
-            await fetch(N8N_ROCHELLE_WEBHOOK_URL, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                buyer_name: buyerName,
-                buyer_email: buyerEmail,
-                buyer_phone: buyerPhone,
-                course_title: String(cp.course_title || courseSlug),
-                selected_package: String(cp.selected_package || ''),
-                selected_date: String(cp.selected_date || ''),
-                amount_paid: data.amount,
-                instructor: String(cp.instructor || '')
-              })
-            })
-            console.log('✅ Rochelle booking notification sent')
-          } catch (e) {
-            console.error('Rochelle notification error:', e)
-          }
-        }
-
-        // Notify Natasha (Pretoria) when a booking is for her
-        if (String(cp.instructor || '').toLowerCase().includes('natasha')) {
-          try {
-            await fetch(N8N_NATASHA_WEBHOOK_URL, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                buyer_name: buyerName,
-                buyer_email: buyerEmail,
-                buyer_phone: buyerPhone,
-                course_title: String(cp.course_title || courseSlug),
-                selected_package: String(cp.selected_package || ''),
-                selected_date: String(cp.selected_date || ''),
-                amount_paid: data.amount,
-                instructor: String(cp.instructor || '')
-              })
-            })
-            console.log('✅ Natasha booking notification sent')
-          } catch (e) {
-            console.error('Natasha notification error:', e)
-          }
-        }
+        // Notify the instructor's own n8n workflow, when they have one.
+        // Shared with payflex-confirm.ts so both payment providers behave identically.
+        // Skipped on ITN retries — see wasAlreadyPaid above.
+        if (!wasAlreadyPaid) await notifyInstructor({
+          instructor: String(cp.instructor || ''),
+          buyerName,
+          buyerEmail,
+          buyerPhone,
+          courseTitle: String(cp.course_title || courseSlug),
+          selectedPackage: String(cp.selected_package || ''),
+          selectedDate: String(cp.selected_date || ''),
+          amountPaid: data.amount
+        })
       }
     }
 

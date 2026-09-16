@@ -536,6 +536,99 @@ export const CourseDetailPage: React.FC = () => {
         }
       ]
     },
+    'customized-shaping-workshop': {
+      id: 'f95e1464-0391-4f4d-81db-043a13d3bd4b', // Matches Store `courses` row
+      sku: 'SKU_CUSTOMIZED_SHAPING_WORKSHOP',
+      title: 'Customized Shaping Workshop',
+      description: 'Shape, style, create. A hands-on one-day workshop at Blom Cosmetics Headquarters in Randfontein covering multiple nail shapes, perfect structure and small art techniques.',
+      // Nails-only crops of the flyer, so the flyer's own lettering doesn't clash with the page title.
+      heroImage: 'https://res.cloudinary.com/hmvetruz/image/upload/f_auto,q_auto/v1789555106/courses/customized-shaping-workshop/hero_v2_tanebf.png',
+      mobileHeroImage: 'https://res.cloudinary.com/hmvetruz/image/upload/c_crop,x_340,y_430,w_380,h_420/c_scale,w_800/f_auto,q_auto/v1789553798/courses/customized-shaping-workshop/shaping_usiqzr.png',
+      heroBgColor: '#F7E9EC',
+      duration: '1 Day Workshop',
+      price: 'R1,500',
+      numericPrice: 1500,
+      // No deposit: the workshop is paid in full to secure a spot.
+      depositAmount: 0,
+      isOnline: false,
+      location: '34 Horingbek Avenue, Helikonpark, Randfontein, Gauteng',
+      instructor: {
+        name: 'Avané Crous',
+        image: '/avane-crous-headshot.webp',
+        bio: 'Professional nail artist and educator with over 8 years of experience. Avané specialises in shape, structure and balance, and helping students build the confidence to take their work to the next level.'
+      },
+      instructors: [
+        {
+          name: 'Avané Crous',
+          image: '/avane-crous-headshot.webp',
+          bio: 'Professional nail artist and educator with over 8 years of experience. Avané specialises in shape, structure and balance, and helping students build the confidence to take their work to the next level.',
+          location: '34 Horingbek Avenue, Helikonpark, Randfontein, Gauteng',
+          email: 'shopblomcosmetics@gmail.com',
+          phone: '+27 79 548 3317',
+          availableDates: [
+            'Tuesday, 29 September 2026'
+          ],
+          trainingSchedule: []
+        }
+      ],
+      about: [
+        'Different shapes. Beautiful results. This hands-on workshop takes you through the nail shapes your clients actually ask for, and the structure work that makes each one sit balanced, symmetrical and strong.',
+        'Avané guides you through every shape step by step at Blom Cosmetics Headquarters, with small, trendy art techniques to complement each one. You leave with sharper shaping, better structure and the confidence to charge for it.'
+      ],
+      packages: [
+        {
+          name: 'Workshop',
+          price: 'R1,500',
+          features: [
+            'Multiple nail shapes to suit every client',
+            'Balance, symmetry and flawless structure',
+            'Easy, trendy small art techniques',
+            'Guided, in-person practice with personal feedback',
+            'Expert guidance from Avané Crous'
+          ]
+        }
+      ],
+      availableDates: [
+        'Tuesday, 29 September 2026'
+      ],
+      thingsToBring: [],
+      trainingSchedule: [],
+      studentDiscount: [],
+      accordionData: [
+        {
+          title: 'DIFFERENT NAIL SHAPES',
+          content: [
+            'Learn and master multiple nail shapes',
+            'Matching the right shape to every client',
+            'Shaping techniques that stay consistent set after set'
+          ]
+        },
+        {
+          title: 'PERFECT STRUCTURE',
+          content: [
+            'Tips for balance and symmetry',
+            'Building flawless shaping from the apex out',
+            'Strength and proportion in every shape'
+          ]
+        },
+        {
+          title: 'SMALL ART TECHNIQUES',
+          content: [
+            'Easy, trendy art techniques',
+            'Small detail work that complements each shape',
+            'Finishing touches clients notice'
+          ]
+        },
+        {
+          title: 'HANDS-ON PRACTICE',
+          content: [
+            'Guided, in-person training throughout the day',
+            'Personal feedback on your own work',
+            'Gain confidence and take your work to the next level'
+          ]
+        }
+      ]
+    },
     'blom-flower-watercolor-workshop': {
       id: '7c5276c1-9207-4653-89c3-bb4c675db5e2', // Matches Academy "Blom Flower Workshop"
       sku: 'SKU_FLOWER_WORKSHOP',
@@ -1730,9 +1823,9 @@ export const CourseDetailPage: React.FC = () => {
                         </div>
                       ) : pkg.kitValue === 'Included' ? (
                         <div className="text-sm font-semibold text-gray-500 uppercase">Kit Included</div>
-                      ) : (
+                      ) : pkg.kitValue ? (
                         <div className="text-sm font-semibold text-gray-500 uppercase">Kit Value: {pkg.kitValue}</div>
-                      )}
+                      ) : null}
                     </div>
                     
                     <ul className="space-y-4 mb-8 flex-grow">

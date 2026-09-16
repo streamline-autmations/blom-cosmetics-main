@@ -33,7 +33,7 @@ const CoursesPage: React.FC = () => {
       slug: 'customized-shaping-workshop',
       title: 'Customized Shaping Workshop',
       description: 'Shape, style, create. Master multiple nail shapes, perfect structure and small art techniques with Avané in a hands-on one-day workshop at Blom HQ.',
-      image: 'https://res.cloudinary.com/hmvetruz/image/upload/c_crop,x_335,y_410,w_395,h_530/c_scale,w_800/f_auto,q_auto/v1789553798/courses/customized-shaping-workshop/shaping_usiqzr.png',
+      image: 'https://res.cloudinary.com/hmvetruz/image/upload/c_crop,x_223,y_0,w_1254,h_941/f_auto,q_auto/v1789561236/courses/customized-shaping-workshop/new_landscape_pktvnz.png',
       duration: '29 September 2026',
       location: 'Randfontein',
       priceLabel: 'R1,500'

@@ -541,9 +541,11 @@ export const CourseDetailPage: React.FC = () => {
       sku: 'SKU_CUSTOMIZED_SHAPING_WORKSHOP',
       title: 'Customized Shaping Workshop',
       description: 'Shape, style, create. A hands-on one-day workshop at Blom Cosmetics Headquarters in Randfontein covering multiple nail shapes, perfect structure and small art techniques.',
-      // Nails-only crops of the flyer, so the flyer's own lettering doesn't clash with the page title.
-      heroImage: 'https://res.cloudinary.com/hmvetruz/image/upload/f_auto,q_auto/v1789555106/courses/customized-shaping-workshop/hero_v2_tanebf.png',
-      mobileHeroImage: 'https://res.cloudinary.com/hmvetruz/image/upload/c_crop,x_340,y_430,w_380,h_420/c_scale,w_800/f_auto,q_auto/v1789553798/courses/customized-shaping-workshop/shaping_usiqzr.png',
+      // Purpose-shot imagery, cropped to each container's exact aspect ratio so the
+      // browser's object-fit: cover has nothing left to crop. Desktop hero is 2:1,
+      // mobile hero is the 0.635 portrait the <picture> source renders at.
+      heroImage: 'https://res.cloudinary.com/hmvetruz/image/upload/c_crop,x_0,y_30,w_1672,h_845/f_auto,q_auto/v1789561236/courses/customized-shaping-workshop/new_landscape_pktvnz.png',
+      mobileHeroImage: 'https://res.cloudinary.com/hmvetruz/image/upload/c_crop,x_170,y_0,w_890,h_1402/f_auto,q_auto/v1789561229/courses/customized-shaping-workshop/new_portrait_wihyic.png',
       heroBgColor: '#F7E9EC',
       duration: '1 Day Workshop',
       price: 'R1,500',

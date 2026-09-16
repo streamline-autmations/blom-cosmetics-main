@@ -31,7 +31,7 @@ const courses = [
     meta: '29 Sep 2026',
     location: 'Randfontein',
     href: '/courses/customized-shaping-workshop',
-    image: 'https://res.cloudinary.com/hmvetruz/image/upload/f_auto,q_auto,w_1400,c_limit/v1789554470/courses/customized-shaping-workshop/banner_hi_iprzoo.png',
+    image: 'https://res.cloudinary.com/hmvetruz/image/upload/f_auto,q_auto,w_1400,c_limit/v1789561409/courses/customized-shaping-workshop/banner_final_yqfm2v.png',
     className: 'academy-course--wide',
   },
 ];

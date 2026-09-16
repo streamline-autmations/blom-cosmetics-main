@@ -105,7 +105,6 @@ export const StockistMap: React.FC<StockistMapProps> = ({
         boundsOptions={{ padding: [48, 48] }}
         scrollWheelZoom
         touchZoom
-        tap
         zoomSnap={0.5}
         zoomDelta={0.5}
         wheelPxPerZoomLevel={90}

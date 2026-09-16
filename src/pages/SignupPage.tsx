@@ -467,7 +467,7 @@ export const SignupPage: React.FC = () => {
                 </div>
 
                 {/* Email Verification Notice */}
-                {status.type === 'success' && status.message.includes('email') && (
+                {status.type === 'success' && typeof status.message === 'string' && status.message.includes('email') && (
                   <div className="mt-6 text-center">
                     <Button 
                       variant="outline" 

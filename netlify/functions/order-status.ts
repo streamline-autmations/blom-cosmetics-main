@@ -8,11 +8,6 @@ function getWebhookUrl(): string {
   return 'https://dockerfile-1n82.onrender.com/webhook/notify-order'
 }
 
-function getPayFastNotifyUrl(): string {
-  // Get the base URL from environment or default
-  const siteUrl = process.env.SITE_URL || process.env.SITE_BASE_URL || 'https://blom-cosmetics.co.za'
-  return `${siteUrl.replace(/\/$/, '')}/.netlify/functions/payfast-itn`
-}
 
 export const handler: Handler = async (event) => {
   try {

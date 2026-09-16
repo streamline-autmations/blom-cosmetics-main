@@ -27,13 +27,6 @@ interface UserJourneyStep {
   properties?: Record<string, any>;
 }
 
-interface ABTTestVariant {
-  id: string;
-  name: string;
-  traffic_percentage: number;
-  conversion_rate: number;
-  variant_data: Record<string, any>;
-}
 
 interface Product {
   id: string;

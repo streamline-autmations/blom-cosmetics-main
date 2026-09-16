@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom';
 import { Header } from '../components/layout/Header';
 import { Footer } from '../components/layout/Footer';
 import { Container } from '../components/layout/Container';
-import { Button } from '../components/ui/Button';
 import { ClickableContact } from '../components/ui/ClickableContact';
 import { ScrollableTabRow } from '../components/ui/ScrollableTabRow';
 import { supabase } from '../lib/supabase';
@@ -26,6 +25,76 @@ import {
   Quote
 } from 'lucide-react';
 
+/**
+ * Shapes for the statically-defined course catalogue below.
+ *
+ * The catalogue is a heterogeneous literal: not every course offers packages,
+ * multiple instructors, or a student discount. Declaring the optional members
+ * explicitly stops TypeScript inferring a union per key (which previously
+ * forced `as any` casts at every access site).
+ */
+interface CourseInstructor {
+  name: string;
+  image?: string;
+  heroImage?: string;
+  bio: string;
+  location?: string;
+  email?: string;
+  phone?: string;
+  availableDates?: string[];
+  trainingSchedule?: Array<string | CourseListSection>;
+  scheduleImages?: Array<{ src: string; alt: string }>;
+}
+
+interface CoursePackage {
+  name: string;
+  price: string;
+  features: string[];
+  kitValue?: string;
+  originalPrice?: string;
+  popular?: boolean;
+  onSale?: boolean;
+}
+
+/** Some list blocks are flat strings, others are grouped under a sub-heading. */
+interface CourseListSection {
+  title: string;
+  items: string[];
+}
+
+interface CourseAccordionItem {
+  title: string;
+  content: string[];
+  note?: string;
+}
+
+interface Course {
+  id: string;
+  sku?: string;
+  title: string;
+  description: string;
+  heroImage: string;
+  mobileHeroImage?: string;
+  heroFit?: string;
+  heroBgColor?: string;
+  duration: string;
+  price: string;
+  originalPrice?: string;
+  numericPrice: number;
+  depositAmount: number;
+  isOnline: boolean;
+  location: string;
+  instructor: CourseInstructor;
+  instructors?: CourseInstructor[];
+  about: string[];
+  packages: CoursePackage[];
+  accordionData: CourseAccordionItem[];
+  availableDates: string[];
+  trainingSchedule: Array<string | CourseListSection>;
+  thingsToBring: string[];
+  studentDiscount: string[];
+}
+
 export const CourseDetailPage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const courseSlug = slug || 'professional-acrylic-training';
@@ -40,7 +109,7 @@ export const CourseDetailPage: React.FC = () => {
     courseSlug === 'trendy-ring-nail-art-course' &&
     privateTestCoupon.startsWith('RING-TEST-');
   // Course data
-  const courses = {
+  const courses: Record<string, Course> = {
     'professional-acrylic-training': {
       id: 'a603be5f-2c56-4e95-9423-8229c8991b40',
       title: 'Ultimate Acrylic Nail Course',
@@ -1101,7 +1170,7 @@ export const CourseDetailPage: React.FC = () => {
 
   // Initialize selectedInstructor with first instructor on mount
   useEffect(() => {
-    const instructors = (course as any).instructors;
+    const instructors = course.instructors;
     if (instructors && instructors.length > 0) {
       const firstInstructor = instructors[0];
       setSelectedInstructor(`${firstInstructor.name} - ${firstInstructor.location}`);
@@ -1139,7 +1208,7 @@ export const CourseDetailPage: React.FC = () => {
     }
     // Use the selected instructor's dates (same source as the Date dropdown);
     // the course-level list would pre-fill a date that instructor doesn't offer.
-    const dates: string[] = (course as any).instructors?.[selectedInstructorIndex]?.availableDates ?? course.availableDates;
+    const dates: string[] = course.instructors?.[selectedInstructorIndex]?.availableDates ?? course.availableDates;
     if (dates.length === 1 && !selectedDate) {
       setSelectedDate(dates[0]);
     }
@@ -1190,7 +1259,7 @@ export const CourseDetailPage: React.FC = () => {
       }
     }
     if (name === 'phone' && typeof value === 'string') {
-      const phoneRegex = /^[0-9\s\-\(\)]{7,15}$/;
+      const phoneRegex = /^[0-9\s\-()]{7,15}$/;
       if (!value.trim()) {
         errors.phone = 'Please enter a valid phone number';
       } else if (!phoneRegex.test(value)) {
@@ -1306,7 +1375,7 @@ export const CourseDetailPage: React.FC = () => {
           },
           items: [{
             product_id: course.id,
-            sku: (course as any).sku,
+            sku: course.sku,
             product_name: `${course.title} - ${selectedPackage} ${paymentLabel}`,
             unit_price: paymentAmountCents,
             quantity: 1
@@ -1357,7 +1426,7 @@ export const CourseDetailPage: React.FC = () => {
             },
             items: [{
               name: itemName,
-              sku: (course as any).sku || '',
+              sku: course.sku || '',
               quantity: 1,
               price: effectivePaymentAmount
             }]
@@ -1462,16 +1531,16 @@ export const CourseDetailPage: React.FC = () => {
         {/* Hero Section */}
         <section
           className="relative h-[70vh] md:h-[80vh] overflow-hidden"
-          style={{ backgroundColor: (course as any).heroBgColor || '#000' }}
+          style={{ backgroundColor: course.heroBgColor || '#000' }}
         >
           <picture>
-            {(course as any).mobileHeroImage && (
-              <source media="(max-width: 768px)" srcSet={(course as any).mobileHeroImage} />
+            {course.mobileHeroImage && (
+              <source media="(max-width: 768px)" srcSet={course.mobileHeroImage} />
             )}
             <img
-              src={(course as any).instructors?.[selectedInstructorIndex]?.heroImage || course.heroImage}
+              src={course.instructors?.[selectedInstructorIndex]?.heroImage || course.heroImage}
               alt={course.title}
-              className={`absolute inset-0 w-full h-full object-cover ${(course as any).heroFit === 'contain' ? 'md:object-contain' : ''}`}
+              className={`absolute inset-0 w-full h-full object-cover ${course.heroFit === 'contain' ? 'md:object-contain' : ''}`}
             />
           </picture>
           <div className="absolute inset-0 bg-black bg-opacity-40"></div>
@@ -1546,13 +1615,13 @@ export const CourseDetailPage: React.FC = () => {
               <div className="w-20 h-1 bg-pink-400 mx-auto mb-12 rounded-full"></div>
 
               {/* Instructor Tabs - Only show if there are multiple instructors */}
-              {(course as any).instructors && (course as any).instructors.length > 1 && (
+              {course.instructors && course.instructors.length > 1 && (
                 <ScrollableTabRow
                   className="mb-8"
                   activeIndex={selectedInstructorIndex}
-                  hint={`Swipe to see all ${(course as any).instructors.length} instructors`}
+                  hint={`Swipe to see all ${course.instructors.length} instructors`}
                 >
-                  {(course as any).instructors.map((inst: any, idx: number) => (
+                  {course.instructors.map((inst: any, idx: number) => (
                     <button
                       key={idx}
                       onClick={() => {
@@ -1578,55 +1647,55 @@ export const CourseDetailPage: React.FC = () => {
                   <div className="w-48 h-48 flex-shrink-0">
                     <div className="w-full h-full rounded-full overflow-hidden border-4 border-pink-400 shadow-lg">
                       <img
-                        src={(course as any).instructors ? (course as any).instructors[selectedInstructorIndex]?.image : course.instructor.image}
-                        alt={(course as any).instructors ? (course as any).instructors[selectedInstructorIndex]?.name : course.instructor.name}
+                        src={course.instructors ? course.instructors[selectedInstructorIndex]?.image : course.instructor.image}
+                        alt={course.instructors ? course.instructors[selectedInstructorIndex]?.name : course.instructor.name}
                         className="w-full h-full object-cover"
                       />
                     </div>
                   </div>
                   <div className="flex-1 text-center md:text-left">
                     <h3 className="text-3xl font-bold text-gray-900 mb-4">
-                      {(course as any).instructors ? (course as any).instructors[selectedInstructorIndex]?.name : course.instructor.name}
+                      {course.instructors ? course.instructors[selectedInstructorIndex]?.name : course.instructor.name}
                     </h3>
                     <p className="text-lg text-gray-700 leading-relaxed">
-                      {(course as any).instructors ? (course as any).instructors[selectedInstructorIndex]?.bio : course.instructor.bio}
+                      {course.instructors ? course.instructors[selectedInstructorIndex]?.bio : course.instructor.bio}
                     </p>
-                    {(course as any).instructors && (course as any).instructors[selectedInstructorIndex]?.location && (
+                    {course.instructors && course.instructors[selectedInstructorIndex]?.location && (
                       <div className="mt-4 p-4 bg-pink-50 rounded-xl">
                         <p className="text-gray-700 font-semibold flex items-center gap-2">
                           <MapPin className="h-4 w-4 text-pink-400 flex-shrink-0" />
                           <span 
                             className="cursor-pointer hover:text-pink-500 transition-colors relative group"
                             onClick={() => {
-                              navigator.clipboard.writeText((course as any).instructors[selectedInstructorIndex]?.location);
+                              navigator.clipboard.writeText(course.instructors?.[selectedInstructorIndex]?.location ?? '');
                             }}
                             title="Click to copy location"
                           >
-                            {(course as any).instructors[selectedInstructorIndex]?.location}
+                            {course.instructors[selectedInstructorIndex]?.location}
                             <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
                               Click to copy
                             </span>
                           </span>
                         </p>
-                        {(course as any).instructors[selectedInstructorIndex]?.email && (
+                        {course.instructors[selectedInstructorIndex]?.email && (
                           <p className="text-gray-700 font-semibold mt-2 flex items-center gap-2">
                             <Mail className="h-4 w-4 text-pink-400" />
                             <a 
-                              href={`mailto:${(course as any).instructors[selectedInstructorIndex]?.email}`}
+                              href={`mailto:${course.instructors[selectedInstructorIndex]?.email}`}
                               className="hover:text-pink-500 transition-colors"
                             >
-                              {(course as any).instructors[selectedInstructorIndex]?.email}
+                              {course.instructors[selectedInstructorIndex]?.email}
                             </a>
                           </p>
                         )}
-                        {(course as any).instructors[selectedInstructorIndex]?.phone && (
+                        {course.instructors[selectedInstructorIndex]?.phone && (
                           <p className="text-gray-700 font-semibold mt-2 flex items-center gap-2">
                             <Phone className="h-4 w-4 text-pink-400" />
                             <a 
-                              href={`tel:${(course as any).instructors[selectedInstructorIndex]?.phone}`}
+                              href={`tel:${course.instructors[selectedInstructorIndex]?.phone}`}
                               className="hover:text-pink-500 transition-colors"
                             >
-                              {(course as any).instructors[selectedInstructorIndex]?.phone}
+                              {course.instructors[selectedInstructorIndex]?.phone}
                             </a>
                           </p>
                         )}
@@ -1869,15 +1938,15 @@ export const CourseDetailPage: React.FC = () => {
                   <p 
                     className="text-gray-800 text-base md:text-lg leading-relaxed cursor-pointer hover:text-pink-500 transition-colors relative group"
                     onClick={() => {
-                      const location = (course as any).instructors && (course as any).instructors[selectedInstructorIndex]?.location 
-                        ? (course as any).instructors[selectedInstructorIndex]?.location 
+                      const location = course.instructors && course.instructors[selectedInstructorIndex]?.location 
+                        ? course.instructors[selectedInstructorIndex]?.location 
                         : course.location;
                       navigator.clipboard.writeText(location);
                     }}
                     title="Click to copy location"
                   >
-                    {(course as any).instructors && (course as any).instructors[selectedInstructorIndex]?.location 
-                      ? (course as any).instructors[selectedInstructorIndex]?.location 
+                    {course.instructors && course.instructors[selectedInstructorIndex]?.location 
+                      ? course.instructors[selectedInstructorIndex]?.location 
                       : course.location}
                     <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
                       Click to copy
@@ -1911,7 +1980,7 @@ export const CourseDetailPage: React.FC = () => {
 
                 {/* Course Dates */}
                 {(() => {
-                  const activeInstructor = (course as any).instructors?.[selectedInstructorIndex];
+                  const activeInstructor = course.instructors?.[selectedInstructorIndex];
                   const displayDates = activeInstructor?.availableDates ?? course.availableDates;
                   const scheduleImages: { src: string; alt: string }[] = activeInstructor?.scheduleImages ?? [];
                   return (
@@ -1999,7 +2068,7 @@ export const CourseDetailPage: React.FC = () => {
                 )}
 
                 {!course.isOnline && (() => {
-                  const activeInstructor = (course as any).instructors?.[selectedInstructorIndex];
+                  const activeInstructor = course.instructors?.[selectedInstructorIndex];
                   const displaySchedule = activeInstructor?.trainingSchedule ?? course.trainingSchedule;
                   return displaySchedule.length > 0 && displaySchedule.map((block: any) => (
                     <div key={block.title} className="p-10 md:p-12 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 text-center" style={{ backgroundColor: '#CEE5FF' }}>
@@ -2044,29 +2113,29 @@ export const CourseDetailPage: React.FC = () => {
                   <h3 className="text-xl font-bold text-gray-900 mb-4 uppercase tracking-wide">Contact</h3>
                   <div className="space-y-3">
                     {/* Dynamic Phone based on selected instructor */}
-                    {((course as any).instructors && (course as any).instructors[selectedInstructorIndex]?.phone) || !course.isOnline ? (
+                    {(course.instructors && course.instructors[selectedInstructorIndex]?.phone) || !course.isOnline ? (
                       <ClickableContact 
                         type="phone" 
-                        value={(course as any).instructors && (course as any).instructors[selectedInstructorIndex]?.phone 
-                          ? (course as any).instructors[selectedInstructorIndex]?.phone 
+                        value={course.instructors && course.instructors[selectedInstructorIndex]?.phone 
+                          ? course.instructors[selectedInstructorIndex]?.phone 
                           : '+27 79 548 3317'} 
                         className="text-gray-800 text-base md:text-lg"
                       >
-                        WhatsApp: {(course as any).instructors && (course as any).instructors[selectedInstructorIndex]?.phone 
-                          ? (course as any).instructors[selectedInstructorIndex]?.phone 
+                        WhatsApp: {course.instructors && course.instructors[selectedInstructorIndex]?.phone 
+                          ? course.instructors[selectedInstructorIndex]?.phone 
                           : '+27 79 548 3317'}
                       </ClickableContact>
                     ) : null}
                     {/* Dynamic Email based on selected instructor */}
                     <ClickableContact 
                       type="email" 
-                      value={(course as any).instructors && (course as any).instructors[selectedInstructorIndex]?.email 
-                        ? (course as any).instructors[selectedInstructorIndex]?.email 
+                      value={course.instructors && course.instructors[selectedInstructorIndex]?.email 
+                        ? course.instructors[selectedInstructorIndex]?.email 
                         : 'shopblomcosmetics@gmail.com'} 
                       className="text-gray-800 text-base md:text-lg"
                     >
-                      Email: {(course as any).instructors && (course as any).instructors[selectedInstructorIndex]?.email 
-                        ? (course as any).instructors[selectedInstructorIndex]?.email 
+                      Email: {course.instructors && course.instructors[selectedInstructorIndex]?.email 
+                        ? course.instructors[selectedInstructorIndex]?.email 
                         : 'shopblomcosmetics@gmail.com'}
                     </ClickableContact>
                   </div>
@@ -2269,7 +2338,7 @@ export const CourseDetailPage: React.FC = () => {
                           <option value="" disabled>
                             Select a date
                           </option>
-                          {((course as any).instructors?.[selectedInstructorIndex]?.availableDates ?? course.availableDates).map((date: string) => (
+                          {(course.instructors?.[selectedInstructorIndex]?.availableDates ?? course.availableDates).map((date: string) => (
                             <option key={date} value={date}>
                               {date}
                             </option>
@@ -2343,7 +2412,7 @@ export const CourseDetailPage: React.FC = () => {
                           value={selectedInstructor}
                           onChange={(e) => {
                             setSelectedInstructor(e.target.value);
-                            const idx = (course as any).instructors?.findIndex((i: any) => `${i.name} - ${i.location}` === e.target.value);
+                            const idx = course.instructors?.findIndex((i: any) => `${i.name} - ${i.location}` === e.target.value);
                             if (idx !== undefined && idx >= 0) {
                               setSelectedInstructorIndex(idx);
                               setSelectedDate('');

@@ -37,9 +37,6 @@ export const handler: Handler = async (event) => {
 
     const headers = { apikey: srk, Authorization: `Bearer ${srk}`, 'Content-Type': 'application/json' } as any;
 
-    // Upsert based on (product_slug, reviewer_name, body hash) to avoid duplicates
-    const hash = Buffer.from(`${product_slug}|${reviewer_name}|${review_body}`).toString('base64');
-
     const payload = {
       product_slug,
       product_id: product_id || null,

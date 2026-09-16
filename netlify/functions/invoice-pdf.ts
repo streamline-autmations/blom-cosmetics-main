@@ -127,7 +127,7 @@ export const handler = async (event: any) => {
           page.drawImage(logoImg, { x: right - logoW, y: y - logoHeight, width: logoW, height: logoHeight })
         }
       }
-    } catch (e) {}
+    } catch { /* optional logo/asset fetch — invoice still renders without it */ }
 
     // Header Details
     drawText("RECEIPT", left, y, 24, true)

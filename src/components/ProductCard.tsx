@@ -1,5 +1,5 @@
 import React from 'react';
-import { Heart, ShoppingCart, Plus } from 'lucide-react';
+import { Heart, Plus } from 'lucide-react';
 import { cartStore, showNotification } from '../lib/cart';
 import { wishlistStore } from '../lib/wishlist';
 import { OptimizedImage } from './seo/OptimizedImage';
@@ -42,7 +42,6 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   badges = [], 
   className = '', 
   isListView = false, 
-  hoverShine = false,
   hideDescription = false,
   displayVariant = 'default',
   variants = [],

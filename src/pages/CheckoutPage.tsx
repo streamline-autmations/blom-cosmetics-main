@@ -6,11 +6,11 @@ import { Container } from '../components/layout/Container';
 import { Card, CardContent, CardHeader } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { cartStore, CartState, formatPrice } from '../lib/cart';
-import { CreditCard, Truck, Shield, Lock, MapPin, Phone, Mail, CreditCard as Edit, Plus, Minus, ArrowLeft, Heart, Trash2, AlertCircle, Zap, Calendar } from 'lucide-react';
+import { CreditCard, Truck, Shield, Lock, MapPin, Phone, Mail, CreditCard as Edit, Plus, Minus, ArrowLeft, Heart, AlertCircle, Zap, Calendar } from 'lucide-react';
 import { useUberDeliveryFlag } from '../hooks/useUberDeliveryFlag';
 import { wishlistStore } from '../lib/wishlist';
 import { AddressAutocomplete } from '../components/checkout/AddressAutocomplete';
-import { validateMobileNumber, validateAddress, formatMobileNumber } from '../lib/validation';
+import { validateMobileNumber, validateAddress } from '../lib/validation';
 import { supabase } from '../lib/supabase';
 import {
   SHIPPING_FLAT_RATE_LABEL,
@@ -113,21 +113,6 @@ export const CheckoutPage: React.FC = () => {
     };
   };
 
-  const recalculateSimpleDiscount = (cartSubtotal: number): number => {
-    const { discountType, discountValue, originalDiscountCents, maxDiscountCents } = simpleCouponDataRef.current;
-    if (!discountType || discountValue <= 0) return 0;
-    if (discountType === 'fixed') return Math.min(originalDiscountCents / 100, cartSubtotal);
-    if (discountType === 'percent') {
-      const subtotalCents = Math.round(cartSubtotal * 100);
-      let newDiscountCents = Math.round(subtotalCents * (discountValue / 100));
-      if (maxDiscountCents !== null && maxDiscountCents > 0 && newDiscountCents > maxDiscountCents) {
-        newDiscountCents = maxDiscountCents;
-      }
-      if (newDiscountCents > subtotalCents) newDiscountCents = subtotalCents;
-      return newDiscountCents / 100;
-    }
-    return 0;
-  };
 
   const clearSimpleCouponData = () => {
     simpleCouponDataRef.current = emptyCouponData();
@@ -156,7 +141,7 @@ export const CheckoutPage: React.FC = () => {
     cardName: ''
   });
 
-  const [userId, setUserId] = useState<string | null>(null);
+  const [, setUserId] = useState<string | null>(null);
 
   // Saved addresses state
   const [savedAddresses, setSavedAddresses] = useState<any[]>([]);
@@ -357,9 +342,6 @@ export const CheckoutPage: React.FC = () => {
     cartStore.updateQuantity(itemId, newQuantity);
   };
 
-  const handleRemoveItem = (itemId: string) => {
-    cartStore.removeItem(itemId);
-  };
 
   const fetchUberQuote = async (lat: number, lng: number) => {
     // Frontend mock for UI testing (active when ?devmode=uber123 was used)

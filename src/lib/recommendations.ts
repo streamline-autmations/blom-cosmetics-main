@@ -80,11 +80,11 @@ type SupabaseProduct = {
 
 const mapSupabaseProduct = (p: SupabaseProduct): CatalogProduct => ({
   id: p.id,
-  slug: p.slug ?? '',
-  title: p.name ?? '',
+  slug: p.slug,
+  title: p.name,
   price: p.price || (p.price_cents ? p.price_cents / 100 : 0),
   thumbnail: p.thumbnail_url || p.image_url,
-  images: [p.thumbnail_url, p.image_url, ...(Array.isArray(p.gallery_urls) ? p.gallery_urls : [])].filter((url): url is string => Boolean(url)),
+  images: [p.thumbnail_url, p.image_url, ...(Array.isArray(p.gallery_urls) ? p.gallery_urls : [])].filter(Boolean),
   category: Array.isArray(p.category) ? p.category[0] : p.category,
   subcategory: p.subcategory,
   status: p.status || (p.is_active === false ? 'inactive' : 'active'),

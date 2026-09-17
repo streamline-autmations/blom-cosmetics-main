@@ -1,4 +1,5 @@
 // Cart state management and utilities
+import { Product, ProductVariant } from './supabase';
 import { analytics } from './analytics';
 import { standardShippingFor } from './shipping';
 

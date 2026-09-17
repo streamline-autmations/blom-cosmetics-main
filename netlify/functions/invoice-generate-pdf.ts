@@ -69,7 +69,7 @@ export const handler = async (event: any) => {
       const dims = img.scale(0.25) // Adjust scale as needed
       page.drawImage(img, { x: left, y: y, width: dims.width, height: dims.height })
       y -= 20
-    } catch { /* optional logo/asset fetch — invoice still renders without it */ }
+    } catch {}
 
     // Header
     rightText("INVOICE / RECEIPT", right, y + 10, 16, true)

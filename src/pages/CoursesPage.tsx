@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Header } from '../components/layout/Header';
 import { Footer } from '../components/layout/Footer';
 import { Container } from '../components/layout/Container';
@@ -118,10 +118,10 @@ const CoursesPage: React.FC = () => {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          const shimmerElement = entry.target.querySelector<HTMLElement>('.shimmer');
+          const shimmerElement = entry.target.querySelector('.shimmer');
           if (shimmerElement && !shimmerElement.classList.contains('shimmer-on-scroll')) {
             // Make container visible first
-            const shimmerContainer = entry.target.querySelector<HTMLElement>('.absolute.inset-0');
+            const shimmerContainer = entry.target.querySelector('.absolute.inset-0');
             if (shimmerContainer) {
               shimmerContainer.style.opacity = '1';
               shimmerContainer.style.pointerEvents = 'none';
@@ -138,10 +138,10 @@ const CoursesPage: React.FC = () => {
           }
         } else {
           // When element goes out of view, reset for re-triggering
-          const shimmerElement = entry.target.querySelector<HTMLElement>('.shimmer');
+          const shimmerElement = entry.target.querySelector('.shimmer');
           if (shimmerElement) {
             shimmerElement.classList.remove('shimmer-on-scroll');
-            const shimmerContainer = entry.target.querySelector<HTMLElement>('.absolute.inset-0');
+            const shimmerContainer = entry.target.querySelector('.absolute.inset-0');
             if (shimmerContainer) {
               shimmerContainer.style.opacity = '0';
             }

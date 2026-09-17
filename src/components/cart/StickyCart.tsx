@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ShoppingCart, Plus, Minus, ChevronUp, ChevronDown } from 'lucide-react';
+import { ShoppingCart, Plus, Minus, ChevronUp, ChevronDown, X } from 'lucide-react';
 
 interface StickyCartProps {
   productName: string;

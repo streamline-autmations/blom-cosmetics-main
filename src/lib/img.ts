@@ -3,7 +3,7 @@ export const transformImg = (url: string, t: string) => {
   
   // 1. Automatic Domain Migration (Fix Broken Links)
   // Replace old 'blom-cosmetics' AND incorrect 'dd89enrjz' with the CORRECT 'drsrbzm2t'
-  const newUrl = url
+  let newUrl = url
     .replace('res.cloudinary.com/blom-cosmetics', 'res.cloudinary.com/drsrbzm2t')
     .replace('res.cloudinary.com/dd89enrjz', 'res.cloudinary.com/drsrbzm2t');
 

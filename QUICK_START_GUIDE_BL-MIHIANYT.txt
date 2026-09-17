@@ -1,0 +1,95 @@
+================================================================================
+🎯 QUICK GUIDE: Order BL-MIHIANYT - PayFast ITN Test & Order Info
+================================================================================
+
+📋 ORDER DETAILS:
+   Order ID: c7c88c8d-a961-4692-9ae7-fbfacf151e88
+   Order Number: BL-MIHIANYT  
+   PayFast Payment ID: BL-19AC5A26DD5
+   Total: R290
+   Customer: annamarie ernst (ernstannamarie18@gmail.com)
+   Current Status: placed/unpaid
+
+================================================================================
+🚀 STEP 1: GET COMPLETE ORDER INFORMATION
+================================================================================
+
+📁 Files Created:
+   ✅ get_order_BL-MIHIANYT_complete.sql - All SQL queries you need
+
+📝 To run the queries:
+   1. Copy the SQL from get_order_BL-MIHIANYT_complete.sql
+   2. Run in your Supabase SQL editor or database client
+   3. You'll see: Order header, items, summary, customer info, stock impact
+
+================================================================================
+🚀 STEP 2: TEST PAYFAST ITN WEBHOOK (Mark Order as Paid)
+================================================================================
+
+📁 Files Created:
+   ✅ test_payfast_itn_BL-MIHIANYT.js - Ready-to-run Node.js script
+   ✅ payfast_itn_test_BL-MIHIANYT.txt - Detailed instructions
+   ✅ verify_order_BL-MIHIANYT.js - Verification script
+
+⚡ FASTEST METHOD - Run the Node.js script:
+   node test_payfast_itn_BL-MIHIANYT.js
+
+🔧 ALTERNATIVE METHODS:
+   1. Use curl command (see detailed instructions file)
+   2. Use Postman/Insomnia (copy form data from instructions)
+   3. Use your HTTP workflow tool (n8n, Make, etc.)
+
+================================================================================
+🚀 STEP 3: VERIFY ORDER WAS MARKED AS PAID
+================================================================================
+
+📋 After sending the webhook, run this SQL query:
+
+SELECT 
+    order_number, 
+    status, 
+    payment_status, 
+    total, 
+    buyer_email, 
+    paid_at
+FROM public.orders 
+WHERE id = 'c7c88c8d-a961-4692-9ae7-fbfacf151e88';
+
+✅ EXPECTED RESULTS:
+   - status: "paid" 
+   - payment_status: "paid"
+   - paid_at: [timestamp]
+
+================================================================================
+🔍 WHAT HAPPENS IN YOUR WORKFLOW:
+================================================================================
+
+When you send the PayFast ITN webhook:
+1. ✅ Validates signature and payment status
+2. ✅ Finds your order by m_payment_id = "BL-19AC5A26DD5" 
+3. ✅ Updates status: "placed" → "paid"
+4. ✅ Updates payment_status: "unpaid" → "paid"
+5. ✅ Sets paid_at timestamp
+6. ✅ Triggers new order alert
+7. ✅ Marks coupon as used (if applicable)
+8. ✅ Enrolls in courses (if applicable)
+9. ✅ Creates payment record
+10. ✅ Generates invoice
+11. ✅ Forwards to n8n workflow
+
+================================================================================
+⚡ QUICK START - Copy & Paste Commands:
+================================================================================
+
+🗃️  GET ORDER INFO:
+   Copy SQL from: get_order_BL-MIHIANYT_complete.sql
+
+🚀  TEST WEBHOOK:
+   node test_payfast_itn_BL-MIHIANYT.js
+
+🔍  VERIFY RESULT:
+   SELECT order_number, status, payment_status, paid_at 
+   FROM public.orders 
+   WHERE id = 'c7c88c8d-a961-4692-9ae7-fbfacf151e88';
+
+================================================================================

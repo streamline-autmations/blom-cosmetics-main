@@ -168,7 +168,7 @@ export const handler: Handler = async (event) => {
     for (const it of items) {
       let baseName = (it.product_name || it.name || 'Unknown Product').trim();
       const skipVariant = ['default title', 'default'];
-      const variantName = it.variant?.title && !skipVariant.includes(it.variant.title.toLowerCase().trim()) ? it.variant.title.trim() : '';
+      let variantName = it.variant?.title && !skipVariant.includes(it.variant.title.toLowerCase().trim()) ? it.variant.title.trim() : '';
       
       // Clean base name if it already contains the variant
       if (variantName && baseName.endsWith(` - ${variantName}`)) {
@@ -178,7 +178,7 @@ export const handler: Handler = async (event) => {
       // Resolve ID
       let resolvedId = null;
       let resolvedProduct = null;
-      const rawId = it.product_id || it.productId || it.id;
+      let rawId = it.product_id || it.productId || it.id;
 
       // Anything the storefront renders as a bundle carries a `bundle-<uuid>` cart id
       // (ShopPage.tsx, ProductDetailPage.tsx). The underlying row may be in EITHER table:

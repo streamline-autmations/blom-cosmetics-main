@@ -1,0 +1,6 @@
+# Repository-scoped Codex configuration for BLOM Cosmetics.
+# Secrets must be supplied through the user's Codex/MCP authentication flow or environment,
+# never committed in this file.
+
+[mcp_servers.supabase]
+url = "https://mcp.supabase.com/mcp?project_ref=yvmnedjybrpvlupygusf&features=docs%2Caccount%2Cdatabase%2Cdebugging%2Cdevelopment%2Cfunctions%2Cbranching%2Cstorage"

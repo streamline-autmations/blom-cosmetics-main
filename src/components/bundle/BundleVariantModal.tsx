@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { X, ShoppingCart, Check } from 'lucide-react';
 import { cartStore, showNotification } from '../../lib/cart';
+import { supabase } from '../../lib/supabase';
 import { Button } from '../ui/Button';
 
 interface BundleVariantItem {
@@ -104,6 +105,9 @@ export const BundleVariantModal: React.FC<BundleVariantModalProps> = ({
     return productVariants[productId] && productVariants[productId].length > 0;
   };
 
+  const getSelectedVariantName = (productId: string) => {
+    return selectedVariants[productId] || '';
+  };
 
   const isAllVariantsSelected = () => {
     return bundle.includedProducts.every((product: any) => {
@@ -145,7 +149,7 @@ export const BundleVariantModal: React.FC<BundleVariantModalProps> = ({
         {/* Content */}
         <div className="p-6 max-h-[60vh] overflow-y-auto">
           <div className="space-y-6">
-            {bundle.includedProducts.map((product: any) => (
+            {bundle.includedProducts.map((product: any, index: number) => (
               <div key={product.id} className="border border-gray-200 rounded-xl p-4">
                 <div className="flex items-center gap-4 mb-4">
                   <div className="w-12 h-12 bg-pink-100 rounded-full flex items-center justify-center">

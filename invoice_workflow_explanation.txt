@@ -1,0 +1,67 @@
+================================================================================
+🎯 INVOICE GENERATION WORKFLOW EXPLANATION
+================================================================================
+
+📋 CURRENT SITUATION:
+   Order: BL-MIHIANYT (c7c88c8d-a961-4692-9ae7-fbfacf151e88)
+   Status: placed
+   Payment: unpaid  
+   Invoice URL: null (not generated yet)
+
+================================================================================
+🔄 WORKFLOW SEQUENCE:
+================================================================================
+
+STEP 1: Customer places order
+✅ Order created with status "placed", payment_status "unpaid"
+❌ No invoice URL yet (not paid)
+
+STEP 2: Customer pays via PayFast  
+✅ Payment processed
+🔄 Waiting for PayFast ITN webhook
+
+STEP 3: PayFast ITN webhook runs ⚡ (THIS IS MISSING!)
+✅ Validates payment status = "COMPLETE"
+✅ Finds order by m_payment_id = "BL-19AC5A26DD5"
+✅ Updates status: "placed" → "paid"
+✅ Updates payment_status: "unpaid" → "paid"  
+✅ Sets paid_at timestamp
+
+STEP 4: Invoice generation (automatic after step 3)
+✅ Triggers: https://cute-stroopwafel-203cac.netlify.app/.netlify/functions/invoice-generate-pdf?m_payment_id=BL-19AC5A26DD5
+✅ Creates PDF invoice file
+✅ Updates invoice_url column with the PDF URL
+
+================================================================================
+🚀 HOW TO GENERATE THE INVOICE URL:
+================================================================================
+
+1. SEND THE ITN WEBHOOK (copy the JSON payload I provided earlier)
+   This will mark your order as paid and trigger invoice generation
+
+2. VERIFY INVOICE GENERATION
+   After webhook runs, check:
+   
+   SELECT invoice_url FROM public.orders WHERE id = 'c7c88c8d-a961-4692-9ae7-fbfacf151e88';
+   
+   Expected result: invoice_url will contain a PDF URL
+
+================================================================================
+🔍 WHAT THE INVOICE URL WILL LOOK LIKE:
+================================================================================
+
+Expected format:
+https://cute-stroopwafel-203cac.netlify.app/invoices/BL-MIHIANYT-[timestamp].pdf
+
+Or potentially:
+https://cute-stroopwafel-203cac.netlify.app/.netlify/functions/invoice-pdf?m_payment_id=BL-19AC5A26DD5
+
+================================================================================
+💡 SUMMARY:
+================================================================================
+
+❌ PROBLEM: Invoice URL is null because order is not marked as paid yet
+✅ SOLUTION: Send PayFast ITN webhook to mark order as paid
+🔄 RESULT: Invoice generation will be triggered automatically
+
+The invoice URL won't exist until the payment is confirmed and the order status changes to "paid"!

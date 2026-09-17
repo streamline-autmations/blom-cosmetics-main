@@ -5,14 +5,16 @@ import { Container } from '../components/layout/Container';
 import { Card, CardContent, CardHeader } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { ClickableContact } from '../components/ui/ClickableContact';
-import {
-  CheckCircle,
-  Mail,
-  Phone,
-  MapPin,
-  Package,
+import { 
+  CheckCircle, 
+  Mail, 
+  Phone, 
+  MapPin, 
+  Package, 
   Truck,
+  Calendar,
   Download,
+  Share2,
   ArrowRight,
   Star
 } from 'lucide-react';

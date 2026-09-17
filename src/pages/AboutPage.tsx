@@ -3,13 +3,19 @@ import { Header } from '../components/layout/Header';
 import { Footer } from '../components/layout/Footer';
 import { Container } from '../components/layout/Container';
 import { Card, CardContent } from '../components/ui/Card';
+import { Button } from '../components/ui/Button';
 import { StockistsTeaser } from '../components/stockists/StockistsTeaser';
-import {
-  Award,
-  Heart,
+import { 
+  Award, 
+  Heart, 
+  Star, 
+  CheckCircle,
   Zap,
   Globe,
   BookOpen,
+  Mail,
+  Phone,
+  MapPin,
   Layers
 } from 'lucide-react';
 
@@ -70,6 +76,15 @@ export const AboutPage: React.FC = () => {
   ];
 
 
+  const milestones = [
+    { year: '2018', event: 'BLOM Cosmetics Founded', description: 'Started with a vision to elevate nail artistry' },
+    { year: '2019', event: 'First Product Line Launch', description: 'Introduced premium acrylic system' },
+    { year: '2020', event: 'Online Training Platform', description: 'Launched comprehensive online education' },
+    { year: '2021', event: '1000+ Students Certified', description: 'Reached major training milestone' },
+    { year: '2022', event: 'International Expansion', description: 'Extended reach to multiple countries' },
+    { year: '2023', event: 'Product Innovation Awards', description: 'Recognition for outstanding product development' },
+    { year: '2024', event: 'Community of 10,000+', description: 'Built thriving professional community' }
+  ];
 
   return (
     <div className="min-h-screen bg-white flex flex-col">

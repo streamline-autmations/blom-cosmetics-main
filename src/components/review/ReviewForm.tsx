@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Star, X, Check, MessageSquare } from 'lucide-react';
+import { Star, X, Check, User, MessageSquare } from 'lucide-react';
 import { Button } from '../ui/Button';
+import { Card, CardContent } from '../ui/Card';
 
 interface ReviewFormProps {
   productName: string;

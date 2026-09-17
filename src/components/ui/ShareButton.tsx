@@ -88,7 +88,7 @@ export const ShareButton: React.FC<ShareButtonProps> = ({
           <div className="absolute bottom-full left-0 mb-2 bg-white rounded-lg shadow-lg border border-gray-200 p-2 z-50 min-w-[200px]">
             <div className="space-y-1">
               {/* Native Share (Mobile) */}
-              {typeof navigator.share === 'function' && (
+              {navigator.share && (
                 <button
                   onClick={handleNativeShare}
                   className="w-full flex items-center gap-3 px-3 py-2 text-left hover:bg-gray-50 rounded-md transition-colors"

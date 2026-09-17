@@ -61,7 +61,7 @@ export const AnnouncementSignup: React.FC = () => {
     session.popupClosed = true;
     session.hasShown = true;
     if (!session.bannerClosed) setIsBannerVisible(true);
-    try { sessionStorage.setItem('signup_popup_closed', '1'); } catch { /* storage unavailable (private mode / quota) — non-critical */ }
+    try { sessionStorage.setItem('signup_popup_closed', '1'); } catch {}
     
     // Restore scroll position after DOM updates complete
     requestAnimationFrame(() => {
@@ -76,7 +76,7 @@ export const AnnouncementSignup: React.FC = () => {
   const closeBanner = () => {
     setIsBannerVisible(false);
     session.bannerClosed = true;
-    try { sessionStorage.setItem('signup_banner_closed', '1'); } catch { /* storage unavailable (private mode / quota) — non-critical */ }
+    try { sessionStorage.setItem('signup_banner_closed', '1'); } catch {}
   };
 
   const openPopup = () => {
@@ -217,7 +217,7 @@ const SignupForm: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) => {
     const trimmedEmail = email.trim();
     const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmedEmail);
     // Simple validation for phone, flexible for international
-    const isValidPhone = /^\+?[0-9\s\-()]{10,}$/.test(phone.trim());
+    const isValidPhone = /^[\+]?[0-9\s\-\(\)]{10,}$/.test(phone.trim());
 
     if (!isValidEmail || !isValidPhone || !consent) {
       setError('Please enter a valid email, phone number, and accept the privacy terms.');

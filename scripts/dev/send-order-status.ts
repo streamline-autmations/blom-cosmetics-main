@@ -1,4 +1,4 @@
- 
+/* eslint-disable no-console */
 
 const url = process.env.LOCAL_ORDER_STATUS_URL || '/.netlify/functions/order-status'
 

@@ -78,7 +78,7 @@ function updateCanonicalURL(url: string | undefined) {
 }
 
 // Product-specific SEO data
-export const productSEO = (productName: string, productDescription: string, _price: number, image?: string) => ({
+export const productSEO = (productName: string, productDescription: string, price: number, image?: string) => ({
   title: `${productName} - Premium Nail Care Product | BLOM Cosmetics`,
   description: `Shop ${productName} at BLOM Cosmetics. ${productDescription} Professional quality nail care products for beauty professionals. Free shipping available.`,
   keywords: `${productName}, nail care, professional cosmetics, beauty products, South Africa, BLOM Cosmetics`,
@@ -88,7 +88,7 @@ export const productSEO = (productName: string, productDescription: string, _pri
 });
 
 // Course-specific SEO data
-export const courseSEO = (courseName: string, _courseDescription: string, instructor: string) => ({
+export const courseSEO = (courseName: string, courseDescription: string, instructor: string) => ({
   title: `${courseName} - Professional Nail Training | BLOM Academy`,
   description: `Learn ${courseName} with expert instructor ${instructor}. Professional nail training course by BLOM Academy. Book your spot today!`,
   keywords: `${courseName}, nail training, beauty course, professional training, nail art, BLOM Academy`,

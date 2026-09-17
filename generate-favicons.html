@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Favicon Generator for BLOM Cosmetics</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .instructions { background: #f0f8ff; padding: 15px; border-radius: 5px; margin: 20px 0; }
+        .step { margin: 10px 0; padding: 10px; background: #fff; border-left: 4px solid #FF74A4; }
+        canvas { border: 1px solid #ccc; margin: 10px; }
+    </style>
+</head>
+<body>
+    <h1>🔄 BLOM Cosmetics Favicon Generator</h1>
+    
+    <div class="instructions">
+        <h3>📋 Instructions:</h3>
+        <p>1. Right-click on each canvas below and "Save image as..."</p>
+        <p>2. Save them in your <code>/public</code> folder with these exact names:</p>
+        <ul>
+            <li><code>favicon.ico</code> (16x16)</li>
+            <li><code>favicon-16x16.png</code></li>
+            <li><code>favicon-32x32.png</code></li>
+            <li><code>favicon-48x48.png</code></li>
+            <li><code>favicon-192x192.png</code></li>
+            <li><code>favicon-512x512.png</code></li>
+            <li><code>apple-touch-icon.png</code> (180x180)</li>
+        </ul>
+    </div>
+
+    <div class="step">
+        <h4>favicon.ico (16x16) - Classic ICO format</h4>
+        <canvas id="favicon16" width="16" height="16"></canvas>
+    </div>
+
+    <div class="step">
+        <h4>favicon-16x16.png</h4>
+        <canvas id="favicon16png" width="16" height="16"></canvas>
+    </div>
+
+    <div class="step">
+        <h4>favicon-32x32.png</h4>
+        <canvas id="favicon32" width="32" height="32"></canvas>
+    </div>
+
+    <div class="step">
+        <h4>favicon-48x48.png</h4>
+        <canvas id="favicon48" width="48" height="48"></canvas>
+    </div>
+
+    <div class="step">
+        <h4>favicon-192x192.png</h4>
+        <canvas id="favicon192" width="192" height="192"></canvas>
+    </div>
+
+    <div class="step">
+        <h4>favicon-512x512.png</h4>
+        <canvas id="favicon512" width="512" height="512"></canvas>
+    </div>
+
+    <div class="step">
+        <h4>apple-touch-icon.png (180x180)</h4>
+        <canvas id="appleTouch" width="180" height="180"></canvas>
+    </div>
+
+    <script>
+        function createFavicon(canvasId, size, isApple = false) {
+            const canvas = document.getElementById(canvasId);
+            const ctx = canvas.getContext('2d');
+            
+            // Clear canvas
+            ctx.clearRect(0, 0, size, size);
+            
+            if (isApple) {
+                // Apple touch icon with rounded corners
+                ctx.fillStyle = '#FF74A4';
+                ctx.fillRect(0, 0, size, size);
+                
+                // Add rounded corners effect
+                ctx.globalCompositeOperation = 'destination-in';
+                ctx.beginPath();
+                const radius = size * 0.2;
+                ctx.roundRect(0, 0, size, size, radius);
+                ctx.fill();
+                ctx.globalCompositeOperation = 'source-over';
+            } else {
+                // Regular favicon with pink background
+                ctx.fillStyle = '#FF74A4';
+                ctx.fillRect(0, 0, size, size);
+            }
+            
+            // Add "B" letter
+            ctx.fillStyle = '#FFFFFF';
+            ctx.font = `bold ${size * 0.7}px Arial, sans-serif`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('B', size / 2, size / 2);
+        }
+
+        // Generate all favicons
+        createFavicon('favicon16', 16);
+        createFavicon('favicon16png', 16);
+        createFavicon('favicon32', 32);
+        createFavicon('favicon48', 48);
+        createFavicon('favicon192', 192);
+        createFavicon('favicon512', 512);
+        createFavicon('appleTouch', 180, true);
+    </script>
+</body>
+</html>

@@ -1,5 +1,5 @@
 {
-  "name": "blom-cosmetics-storefront",
+  "name": "vite-react-typescript-starter",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -9,19 +9,18 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview",
-    "typecheck": "tsc --noEmit -p tsconfig.app.json",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
-    "test": "npm run test:promotion && npm run test:cateye && npm run test:shipping",
     "test:promotion": "tsx --test src/lib/womensDayPromotion.test.ts",
     "test:cateye": "tsx --test src/lib/catEyeTwoForOffer.test.ts",
     "test:shipping": "tsx --test src/lib/shipping.test.ts",
-    "check": "npm run typecheck && npm run lint && npm run test",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit -p tsconfig.app.json",
     "seed:products": "tsx scripts/seed-products.ts"
   },
   "dependencies": {
     "@react-google-maps/api": "^2.20.7",
+    "@react-pdf/renderer": "^4.3.1",
+    "@sparticuz/chromium": "^141.0.0",
     "@supabase/supabase-js": "^2.57.4",
     "@vitejs/plugin-react": "^4.7.0",
     "crypto-js": "^4.2.0",
@@ -30,6 +29,7 @@
     "lucide-react": "^0.344.0",
     "node-fetch": "^3.3.2",
     "pdf-lib": "^1.17.1",
+    "puppeteer-core": "^24.27.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-leaflet": "^4.2.1",

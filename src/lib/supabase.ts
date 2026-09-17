@@ -177,7 +177,7 @@ export const queries = {
   },
 
   // Get published blog posts
-  getBlogPosts: async (_limit = 10) => {
+  getBlogPosts: async (limit = 10) => {
     // const { data, error } = await supabase
     //   .from('blog_posts')
     //   .select('*')
@@ -218,7 +218,7 @@ export const queries = {
   },
 
   // Get products by category
-  getProductsByCategory: async (_categorySlug: string) => {
+  getProductsByCategory: async (categorySlug: string) => {
     // const { data, error } = await supabase
     //   .from('products')
     //   .select(`
@@ -245,7 +245,7 @@ export const queries = {
   },
 
   // Get single product by slug
-  getProductBySlug: async (_slug: string) => {
+  getProductBySlug: async (slug: string) => {
     // const { data, error } = await supabase
     //   .from('products')
     //   .select(`

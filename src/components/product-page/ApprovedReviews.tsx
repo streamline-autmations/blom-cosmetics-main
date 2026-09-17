@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabase';
-import { Star, ChevronDown, Camera } from 'lucide-react';
+import { Star, Filter, ChevronDown, Camera } from 'lucide-react';
 
 interface Review {
   id: string;

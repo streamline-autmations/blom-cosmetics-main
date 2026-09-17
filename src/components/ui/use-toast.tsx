@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 
 type ToastProps = {
   title?: string;
@@ -6,6 +6,9 @@ type ToastProps = {
   duration?: number;
 };
 
+type ToastContextType = {
+  toast: (props: ToastProps) => void;
+};
 
 // Create a simple custom event for toasts
 const TOAST_EVENT = 'ui-toast';

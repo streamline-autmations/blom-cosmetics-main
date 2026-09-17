@@ -9,6 +9,7 @@ import { Container } from '../components/layout/Container';
 import { PageLoadingSpinner } from '../components/ui/LoadingSpinner';
 import { AccordionItem } from '../components/ui/Accordion';
 import { ReviewSection } from '../components/review/ReviewSection';
+import { ShareButton } from '../components/ui/ShareButton';
 import { OptimizedImage } from '../components/seo/OptimizedImage';
 import { 
   Star, 
@@ -63,6 +64,7 @@ export const ProductDetailPage: React.FC = () => {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [selectedVariant, setSelectedVariant] = useState<string | null>(null);
   const [quantity, setQuantity] = useState(1);
+  const [activeTab, setActiveTab] = useState('details');
   // For bundles/collections: the resolved component products shown in "What's Included"
   const [bundleComponents, setBundleComponents] = useState<any[]>([]);
 
@@ -232,7 +234,7 @@ export const ProductDetailPage: React.FC = () => {
                       imgLower.includes(variantName.toLowerCase().replace(/\s+/g, '-')) ||
                       imgLower.includes(variantName.toLowerCase().replace(/\s+/g, '')) ||
                       // Match individual words (e.g., "cotton" and "candy" in "cotton-candy")
-                      (variantNameWords.length > 1 && variantNameWords.every((word: string) => imgLower.includes(word))) ||
+                      (variantNameWords.length > 1 && variantNameWords.every(word => imgLower.includes(word))) ||
                       // Match with product slug prefix (e.g., "cuticle-oil-vanilla")
                       (productSlug && imgLower.includes(`${productSlug}-${variantNameSlug}`)) ||
                       (productSlug && imgLower.includes(`${productSlug}_${variantNameSlug}`));

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Beauty Club Signup Function</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-form {
+            space-y: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="email"], input[type="tel"], input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 15px 0;
+        }
+        button {
+            background: #ec4899;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background: #db2777;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            white-space: pre-wrap;
+        }
+        .success {
+            background-color: #d1fae5;
+            border: 1px solid #a7f3d0;
+            color: #065f46;
+        }
+        .error {
+            background-color: #fee2e2;
+            border: 1px solid #fca5a5;
+            color: #991b1b;
+        }
+        .info {
+            background-color: #dbeafe;
+            border: 1px solid #93c5fd;
+            color: #1e40af;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Test Beauty Club Signup Function</h1>
+        <p>This page tests the fixed beauty club signup Netlify function directly.</p>
+        
+        <form class="test-form" id="signupForm">
+            <div class="form-group">
+                <label for="email">Email Address:</label>
+                <input type="email" id="email" name="email" required placeholder="test@example.com">
+            </div>
+            
+            <div class="form-group">
+                <label for="phone">Phone Number:</label>
+                <input type="tel" id="phone" name="phone" required placeholder="082 123 4567">
+            </div>
+            
+            <div class="form-group">
+                <label for="firstName">First Name (Optional):</label>
+                <input type="text" id="firstName" name="first_name" placeholder="John">
+            </div>
+            
+            <div class="checkbox-group">
+                <input type="checkbox" id="consent" name="consent" required>
+                <label for="consent">I agree to receive marketing emails and accept the privacy policy.</label>
+            </div>
+            
+            <button type="submit">Test Signup</button>
+        </form>
+        
+        <div id="result"></div>
+    </div>
+
+    <script>
+        document.getElementById('signupForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const payload = {
+                email: formData.get('email'),
+                phone: formData.get('phone'),
+                first_name: formData.get('first_name') || '',
+                consent: formData.get('consent') === 'on',
+                source: 'popup'
+            };
+            
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '<div class="info">Testing signup function...</div>';
+            
+            try {
+                console.log('Testing beauty club signup with payload:', payload);
+                
+                const response = await fetch('/.netlify/functions/beauty-club-signup', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(payload)
+                });
+                
+                const responseText = await response.text();
+                let responseData;
+                try {
+                    responseData = JSON.parse(responseText);
+                } catch {
+                    responseData = { message: responseText, raw: responseText };
+                }
+                
+                const resultClass = response.ok ? 'success' : 'error';
+                const statusText = response.ok ? 'SUCCESS' : `ERROR (${response.status})`;
+                
+                resultDiv.innerHTML = `
+                    <div class="${resultClass}">
+                        <strong>${statusText}</strong>
+                        <pre>${JSON.stringify(responseData, null, 2)}</pre>
+                        <details style="margin-top: 10px;">
+                            <summary>Raw Response</summary>
+                            <pre>${responseText}</pre>
+                        </details>
+                    </div>
+                `;
+                
+                console.log('Response:', { status: response.status, data: responseData });
+                
+            } catch (error) {
+                console.error('Error:', error);
+                resultDiv.innerHTML = `
+                    <div class="error">
+                        <strong>NETWORK ERROR</strong>
+                        <pre>${error.message}</pre>
+                    </div>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>

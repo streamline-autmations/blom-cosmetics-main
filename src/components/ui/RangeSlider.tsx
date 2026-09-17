@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 interface RangeSliderProps {
   min: number;
@@ -15,6 +15,7 @@ export const RangeSlider: React.FC<RangeSliderProps> = ({
   step = 1,
   value,
   onChange,
+  formatLabel = (v) => v.toString(),
 }) => {
   const [localValue, setLocalValue] = useState(value);
 

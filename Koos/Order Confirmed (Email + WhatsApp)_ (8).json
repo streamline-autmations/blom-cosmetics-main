@@ -1,0 +1,465 @@
+{
+  "name": "Order Confirmed (Email + WhatsApp)\\",
+  "nodes": [
+    {
+      "parameters": {
+        "jsCode": "const arr = Array.isArray($input.first().json) ? $input.first().json : [];\n\nif (!arr.length) {\n  const wb = $items(\"Webhook (Beauty Club)1\", 0, 0)?.json?.body || {};\n  return [{ json: { \n    order: null, \n    order_items: [], \n    m_payment_id: wb.m_payment_id || $json.m_payment_id || null, \n    site_url: 'https://cute-stroopwafel-203cac.netlify.app' \n  }}];\n}\n\nconst order = arr[0];\nconst order_items = Array.isArray(order.order_items) ? order.order_items : [];\n\nreturn [{ \n  json: { \n    ...order,           // Flatten all order fields\n    order,              // Keep nested\n    order_items,        // At root\n    site_url: 'https://cute-stroopwafel-203cac.netlify.app',\n    email: order.buyer_email || order.customer_email || order.email,\n    customer_name: order.buyer_name || order.customer_name || 'there'\n  } \n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        336,
+        400
+      ],
+      "id": "802b190e-e3cd-4060-9330-c4fdedac0d78",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "notify-order",
+        "options": {
+          "responseData": "ok"
+        }
+      },
+      "id": "efd7138a-737a-4e1f-bab9-7a17866f1a2e",
+      "name": "Webhook (Beauty Club)1",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        -544,
+        400
+      ],
+      "webhookId": "664ca714-6db6-46ec-b473-5a6e84e39822"
+    },
+    {
+      "parameters": {
+        "values": {
+          "string": [
+            {
+              "name": "SITE_URL",
+              "value": "=https://blom-cosmetics.co.za"
+            },
+            {
+              "name": "SB_URL",
+              "value": "=https://yvmnedjybrpvlupygusf.supabase.co"
+            },
+            {
+              "name": "SB_SERVICE_KEY",
+              "value": "=SUPABASE_SERVICE_ROLE_KEY_PLACEHOLDER"
+            },
+            {
+              "name": "EMAIL_FN",
+              "value": "https://blom-cosmetics.co.za/.netlify/functions/notify-email"
+            },
+            {
+              "name": "WA_PHONE_ID",
+              "value": "840414442487843"
+            },
+            {
+              "name": "WA_TOKEN",
+              "value": "EAAgd2AGtrT0BP0eOAje8uSo85WFZCYrWVhm0U6U56M9ESAZCW607f71aTpB7qXcjVDbSf1Lerc1b8mgPZBI7DrFoDUZAZClCZAUpKS6MMSzdvAMJDz9Vn4aigKUXSCGNKMGX98gEHOKnLN96jqTgtMTBjIa8TO4mHPgltLQE0TcNBvL72j7RiZBRGTxZCKQOabecuPvRqYh1L2FZCVlBZCaGeCHFovyX9fShk4MSNn4PZBe"
+            },
+            {
+              "name": "WA_TEMPLATE",
+              "value": "order_confirmed"
+            },
+            {}
+          ]
+        },
+        "options": {}
+      },
+      "id": "d5bf878c-ac55-4d67-989a-8816ea1d344a",
+      "name": "CONFIG1",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 2,
+      "position": [
+        -320,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Read from the Webhook node (same execution), else fall back to current $json\nconst wb = $item(0).$node[\"Webhook (Beauty Club)1\"]?.json ?? {};\nconst body = (wb.body ?? wb ?? {});\nconst here = $json ?? {};\n\n// Accept either source\nconst m_payment_id = String(body.m_payment_id ?? here.m_payment_id ?? '').trim();\nconst site_url     = String(body.site_url     ?? here.site_url     ?? here.SITE_URL ?? '').trim();\n\nif (!m_payment_id) {\n  return [{ json: { error: 'MISSING_PAYMENT_ID' }, pairedItem: { item: 0 } }];\n}\n\nreturn [{ json: { m_payment_id, site_url } }];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -96,
+        400
+      ],
+      "id": "287f8c5e-c034-44b2-bc4a-b3ae75146f1d",
+      "name": "Validate Input1"
+    },
+    {
+      "parameters": {
+        "url": "https://yvmnedjybrpvlupygusf.supabase.co/rest/v1/orders",
+        "sendQuery": true,
+        "specifyQuery": "=keypair",
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "select",
+              "value": "*,order_items(*,product:products(name,slug,price))"
+            },
+            {
+              "name": "m_payment_id",
+              "value": "=eq.{{$json.m_payment_id}}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "SUPABASE_SERVICE_ROLE_KEY_PLACEHOLDER"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer SUPABASE_SERVICE_ROLE_KEY_PLACEHOLDER"
+            },
+            {
+              "name": "Accept",
+              "value": "application/json"
+            }
+          ]
+        },
+        "options": {
+          "response": {
+            "response": {
+              "neverError": true
+            }
+          }
+        }
+      },
+      "id": "e58731fe-f0b6-41f0-9a0d-7c183e7f3b3e",
+      "name": "Get Order (Supabase RPC)1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        128,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "aff1fcf3-1fac-48da-98ac-26b5473634a2",
+              "leftValue": "={{ $json.m_payment_id }}",
+              "rightValue": "true",
+              "operator": {
+                "type": "string",
+                "operation": "exists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        560,
+        400
+      ],
+      "id": "0e8432a2-d35b-4850-8637-50e831bae956",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "fromEmail": "no-reply@blom-cosmetics.co.za",
+        "toEmail": "={{ $('Get Order (Supabase RPC)1').item.json.buyer_email }}",
+        "subject": "=Order #{{ $('Code in JavaScript1').item.json.m_payment_id }} confirmed — BLOM",
+        "emailFormat": "html",
+        "html": "=<!doctype html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"utf-8\">\n  <title>Your BLOM Cosmetics Order is Confirmed</title>\n  <meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">\n  <style>\n    /* Basic mobile-first reset */\n    body { margin:0; padding:0; -webkit-text-size-adjust:100%; width:100% !important; }\n    table { border-spacing:0; }\n    td { padding:0; }\n    img { border:0; }\n    /* Ensure links aren't blue */\n    a { color: #E75C9C; text-decoration: none; }\n  </style>\n</head>\n<body style=\"margin:0;padding:0;background:#FBEAF2;font-family:Arial,Helvetica,sans-serif;color:#111;\">\n  \n  <div style=\"display:none;max-height:0;overflow:hidden;opacity:0;\">\n    Thanks for shopping with us! Your order #{{ $('Get Order (Supabase RPC)1').item.json.m_payment_id }} is confirmed.\n  </div>\n\n  <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" style=\"background:linear-gradient(180deg,#FBEAF2 0%,#E3F1FF 100%);\">\n    <tr>\n      <td align=\"center\" style=\"padding:40px 16px;\">\n        \n        <table role=\"presentation\" width=\"640\" cellpadding=\"0\" cellspacing=\"0\" bgcolor=\"#ffffff\" style=\"max-width:640px;border:1px solid #E9DDE4;border-radius:14px;overflow:hidden;\">\n          \n          <tr>\n            <td align=\"center\" style=\"padding:32px 24px 16px;\">\n              <img src=\"https://yvmnedjybrpvlupygusf.supabase.co/storage/v1/object/public/assets/blom_logo.png\" \n                   width=\"140\" alt=\"BLOM Cosmetics\" style=\"display:block;border:0;outline:none;text-decoration:none;\">\n            </td>\n          </tr>\n\n          <tr>\n            <td align=\"center\" style=\"padding:0 28px 8px;\">\n              <h1 style=\"margin:0;font-size:24px;line-height:32px;color:#111;\">\n                Thank you for your purchase!\n              </h1>\n              <p style=\"margin:12px 0 0;font-size:16px;color:#555;\">\n                Hi {{ $('Get Order (Supabase RPC)1').item.json.buyer_name }}, your order is confirmed.\n              </p>\n            </td>\n          </tr>\n\n        {{ $('Get Order (Supabase RPC)1').item.json.invoice_url ? `\n          <tr>\n            <td style=\"padding:16px 28px 28px;\">\n              <p style=\"margin:0;font-size:14px;color:#111;line-height:22px;\">\n                <a href=\"${$('Get Order (Supabase RPC)1').item.json.invoice_url}\" style=\"color:#E75C9C;font-weight:700;text-decoration:underline;\">\n                  Download your receipt here\n                </a>\n              </p>\n            </td>\n          </tr>\n          ` : '' }}\n\n          <tr>\n            <td style=\"padding:0 28px 20px;\">\n              \n              <table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" style=\"border-top:1px solid #E9DDE4; border-bottom:1px solid #E9DDE4;\">\n                \n                <tr>\n                  <td style=\"padding:16px 0;font-family:Arial,Helvetica,sans-serif;font-size:14px;color:#555;font-weight:bold;\">\n                    Order #{{ $('Get Order (Supabase RPC)1').item.json.m_payment_id }}\n                  </td>\n                </tr>\n                \n                <tr>\n                  <td style=\"padding:8px 0;font-family:Arial,Helvetica,sans-serif;font-size:14px;color:#555;\">\n                    Total Paid: \n                    <span style=\"font-weight:700;color:#111;\">\n                      R{{ $('Get Order (Supabase RPC)1').item.json.total }}\n                    </span>\n                  </td>\n                </tr>\n\n                <tr>\n                  <td style=\"padding:8px 0 16px;font-family:Arial,Helvetica,sans-serif;font-size:14px;color:#555;\">\n                    Payment: \n                    <span style=\"font-weight:700;color:#10B981;\">\n                      ✅ {{ $json.status.charAt(0).toUpperCase() + $json.auto_transform_this_variable_to_be_the_same_as_the_json_status.slice(1) }}\n                    </span>\n                  </td>\n                </tr>\n\n              </table>\n            </td>\n          </tr>\n          \n          <tr>\n            <td style=\"padding:8px 28px 28px;\">\n              <p style=\"margin:0;font-size:14px;color:#666;line-height:22px;\">\n                You'll get a WhatsApp and email when your order is out for delivery or ready for collection.\n              </p>\n            </td>\n          </tr>\n          \n          <tr>\n            <td align=\"center\" style=\"padding:0 28px 32px; border-top: 1px solid #E9DDE4;\">\n              <p style=\"margin:24px 0 0;font-size:14px;color:#6B7280;\">\n                Want to check your order status?<br>\n                <a href=\"{{ $('CONFIG1').item.json.SITE_URL }}/account\" \n                   style=\"color:#E75C9C;text-decoration:none;font-weight:600;\">\n                   View your account here &rarr;\n                </a>\n              </p>\n            </td>\n          </tr>\n\n          <tr>\n            <td bgcolor=\"#FAEFF6\" align=\"center\" style=\"padding:14px 20px;border-top:1px solid #E9DDE4;border-radius:0 0 14px 14px\">\n              <p style=\"margin:0;font-size:12px;color:#6B7280;\">\n                © 2025 BLOM Cosmetics · <a href=\"mailto:support@blom-cosmetics.co.za\" style=\"color:#E75C9C;text-decoration:none;\">support@blom-cosmetics.co.za</a>\n              </p>\n            </td>\n          </tr>\n\n        </table>\n      </td>\n    </tr>\n  </table>\n</body>\n</html>",
+        "options": {}
+      },
+      "id": "e5a83639-86db-4327-afd4-c1372c422fb4",
+      "name": "Send Email (Brevo)1",
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2,
+      "position": [
+        1408,
+        304
+      ],
+      "webhookId": "a9e61a53-80a2-4f24-b866-499d1081d61d",
+      "credentials": {
+        "smtp": {
+          "id": "UPqY4jX0fLOzQlMb",
+          "name": "no-reply@blom-cosmetics.co.za"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "={{$json.SB_URL}}/rest/v1/orders?id=eq.{{$json.order.id}}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "apikey",
+              "value": "={{$json.SB_SERVICE_KEY}}"
+            },
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{$json.SB_SERVICE_KEY}}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Prefer",
+              "value": "return=minimal"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={ \"notified_at\": \"{{ $now }}\" }\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2080,
+        304
+      ],
+      "id": "4eb9d25e-b65c-4700-a4ce-48e094b26bd1",
+      "name": "Mark Notified1"
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "={{ $json.error || 'UNKNOWN_ERROR' }}",
+        "options": {
+          "responseCode": 400
+        }
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.4,
+      "position": [
+        928,
+        448
+      ],
+      "id": "ca6e395c-eef9-453d-90f7-0c87742ccf13",
+      "name": "Respond to Webhook1"
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "={\n  \"order_number\": \"{{ $json.order.order_number || $json.order.m_payment_id || 'ORDER' }}\",\n  \"customer_name\": \"{{ $json.order.buyer_name || $json.order.customer_name || 'there' }}\",\n  \"customer_email\": \"{{ $json.order.buyer_email || $json.order.customer_email || '' }}\",\n  \"customer_phone\": \"{{ ($json.order.buyer_phone || $json.order.customer_phone || '').replace(/^0/, '27') }}\",\n  \"total\": \"{{ Number($json.order.total || ($json.order.total_cents/100) || 0).toFixed(2) }}\",\n  \"items_bullets\": \"{{ ($json.order_items || []).map(i => `• ${i.product_name || i.product?.name || 'Item'} ×${i.quantity || 1} — R${Number(i.unit_price || i.product?.price || 0).toFixed(2)}`).join('\\\\n') }}\",\n  \"items_summary\": \"{{ ($json.order_items || []).map(i => `${i.product_name || i.product?.name || 'Item'} x${i.quantity || 1}`).join(', ') }}\",\n  \"order_url\": \"{{ ($json.site_url || 'https://blom-cosmetics.co.za') + '/account/orders' }}\",\n  \"track_url\": \"{{ ($json.site_url || 'https://blom-cosmetics.co.za') + '/track-order?ref=' + encodeURIComponent($json.order.m_payment_id || '') }}\",\n  \"email_subject\": \"{{ 'Order #' + ($json.order.order_number || $json.order.m_payment_id || 'ORDER') + ' confirmed ✅' }}\"\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        896,
+        304
+      ],
+      "id": "7db28dd4-7a37-4936-93d9-323c157c08cc",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://graph.facebook.com/v22.0/840414442487843/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer EAAgd2AGtrT0BP0eOAje8uSo85WFZCYrWVhm0U6U56M9ESAZCW607f71aTpB7qXcjVDbSf1Lerc1b8mgPZBI7DrFoDUZAZClCZAUpKS6MMSzdvAMJDz9Vn4aigKUXSCGNKMGX98gEHOKnLN96jqTgtMTBjIa8TO4mHPgltLQE0TcNBvL72j7RiZBRGTxZCKQOabecuPvRqYh1L2FZCVlBZCaGeCHFovyX9fShk4MSNn4PZBe"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "{\n  \"messaging_product\": \"whatsapp\",\n  \"to\": \"{{ $json.customer_phone_number }}\",\n  \"type\": \"template\",\n  \"template\": {\n    \"name\": \"order_confirmed\",\n    \"language\": {\n      \"code\": \"en\"\n    },\n    \"components\": [\n      {\n        \"type\": \"header\",\n        \"parameters\": [\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $json.order_number }}\"\n          }\n        ]\n      },\n      {\n        \"type\": \"body\",\n        \"parameters\": [\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $json.order_number }}\"\n          },\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $json.total_amount }}\"\n          },\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $json.items_summary }}\"\n          },\n          {\n            \"type\": \"text\",\n            \"text\": \"{{ $json.customer_name }}\"\n          }\n        ]\n      }\n    ]\n  }\n}",
+        "options": {}
+      },
+      "id": "fc0fcc83-d35e-4270-ba35-1e985dc80b17",
+      "name": "Send WhatsApp",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [
+        1680,
+        304
+      ],
+      "continueOnFail": true
+    }
+  ],
+  "pinData": {
+    "Webhook (Beauty Club)1": [
+      {
+        "json": {
+          "headers": {
+            "host": "dockerfile-1n82.onrender.com",
+            "user-agent": "axios/1.12.0",
+            "content-length": "123",
+            "accept": "application/json,text/html,application/xhtml+xml,application/xml,text/*;q=0.9, image/*;q=0.8, */*;q=0.7",
+            "accept-encoding": "gzip, br",
+            "cdn-loop": "cloudflare; loops=1",
+            "cf-connecting-ip": "74.220.48.6",
+            "cf-ipcountry": "US",
+            "cf-ray": "99df312ebd5d0055-PDX",
+            "cf-visitor": "{\"scheme\":\"https\"}",
+            "content-type": "application/json",
+            "render-proxy-ttl": "4",
+            "rndr-id": "ccdc344a-6876-4bbc",
+            "true-client-ip": "74.220.48.6",
+            "x-forwarded-for": "74.220.48.6, 172.68.174.196",
+            "x-forwarded-proto": "https",
+            "x-request-start": "1763046586707990"
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "order_id": "e0bdd53c-6177-4ea2-9d85-0ac309ca6368",
+            "m_payment_id": "BL-19A7D845E8F",
+            "status": "paid",
+            "payment_status": "paid"
+          },
+          "webhookUrl": "https://dockerfile-1n82.onrender.com:80/webhook/notify-order",
+          "executionMode": "production"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook (Beauty Club)1": {
+      "main": [
+        [
+          {
+            "node": "CONFIG1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "CONFIG1": {
+      "main": [
+        [
+          {
+            "node": "Validate Input1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate Input1": {
+      "main": [
+        [
+          {
+            "node": "Get Order (Supabase RPC)1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Order (Supabase RPC)1": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond to Webhook1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Email (Brevo)1": {
+      "main": [
+        [
+          {
+            "node": "Send WhatsApp",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Send Email (Brevo)1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send WhatsApp": {
+      "main": [
+        [
+          {
+            "node": "Mark Notified1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "cc992339-016e-450f-b805-f09c325489e4",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "ea68ba36ca0942af7da3c2dc6d22a13e526fb635f2a177627caaad60d354fa33"
+  },
+  "id": "lZLEUW4kPtRwratl",
+  "tags": []
+}

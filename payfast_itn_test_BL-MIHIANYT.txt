@@ -1,0 +1,138 @@
+================================================================================
+PAFAST ITN WEBHOOK TEST FOR ORDER BL-MIHIANYT
+================================================================================
+
+🎯 OBJECTIVE: Test your PayFast ITN webhook to mark order as paid
+📋 ORDER DETAILS:
+   - Order ID: c7c88c8d-a961-4692-9ae7-fbfacf151e88
+   - Order Number: BL-MIHIANYT
+   - PayFast Payment ID: BL-19AC5A26DD5
+   - Total: R290
+   - Status: placed/unpaid
+   - Buyer: annamarie ernst (ernstannamarie18@gmail.com)
+
+================================================================================
+🚀 HOW TO TEST YOUR PAYFAST ITN WEBHOOK:
+================================================================================
+
+METHOD 1: Using curl (Command Line)
+-----------------------------------
+curl -X POST https://cute-stroopwafel-203cac.netlify.app/.netlify/functions/payfast-itn \
+  -H "Content-Type: application/x-www-form-urlencoded" \
+  -d "merchant_id=10000100&merchant_key=46f0cd694581a&payment_status=COMPLETE&item_name=Order+BL-MIHIANYT&item_description=Payment+for+order+BL-MIHIANYT&custom_str1=BL-MIHIANYT&name_first=annamarie&name_last=ernst&email_address=ernstannamarie18@gmail.com&m_payment_id=BL-19AC5A26DD5&amount=290.00&signature=e2b04e0c7ab2360ec2b7ba60d4b9e6e9"
+
+METHOD 2: Using Postman or similar tool
+---------------------------------------
+POST URL: https://cute-stroopwafel-203cac.netlify.app/.netlify/functions/payfast-itn
+Content-Type: application/x-www-form-urlencoded
+
+Raw form data:
+merchant_id=10000100&merchant_key=46f0cd694581a&payment_status=COMPLETE&item_name=Order+BL-MIHIANYT&item_description=Payment+for+order+BL-MIHIANYT&custom_str1=BL-MIHIANYT&name_first=annamarie&name_last=ernst&email_address=ernstannamarie18@gmail.com&m_payment_id=BL-19AC5A26DD5&amount=290.00&signature=e2b04e0c7ab2360ec2b7ba60d4b9e6e9
+
+METHOD 3: Using a test HTTP client (like in n8n, Make, etc.)
+------------------------------------------------------------
+Configure HTTP Request node:
+- Method: POST
+- URL: https://cute-stroopwafel-203cac.netlify.app/.netlify/functions/payfast-itn
+- Headers: Content-Type: application/x-www-form-urlencoded
+- Body: (paste the form data from METHOD 1)
+
+================================================================================
+📋 KEY FIELDS FOR ORDER STATUS UPDATE:
+================================================================================
+
+The PayFast ITN expects these critical fields to mark your order as paid:
+
+✅ REQUIRED FIELDS:
+   - merchant_id: 10000100
+   - merchant_key: 46f0cd694581a  
+   - payment_status: COMPLETE (THIS IS KEY - must be "COMPLETE" not "complete")
+   - m_payment_id: BL-19AC5A26DD5 (your order's payment ID)
+   - amount: 290.00 (exact amount)
+   - signature: e2b04e0c7ab2360ec2b7ba60d4b9e6e9
+   - item_name: Order BL-MIHIANYT
+
+✅ OPTIONAL FIELDS (for customer context):
+   - name_first: annamarie
+   - name_last: ernst  
+   - email_address: ernstannamarie18@gmail.com
+
+================================================================================
+🔧 WHAT HAPPENS WHEN YOU SEND THE WEBHOOK:
+================================================================================
+
+1. ✅ Validates signature matches PayFast format
+2. ✅ Checks payment_status = "COMPLETE" 
+3. ✅ Finds your order by m_payment_id = "BL-19AC5A26DD5"
+4. ✅ Validates amount matches R290.00
+5. ✅ Updates order status: "placed" → "paid"
+6. ✅ Updates payment_status: "unpaid" → "paid" 
+7. ✅ Sets paid_at timestamp
+8. ✅ Triggers new order alert webhook
+9. ✅ Marks coupon as used (if any)
+10. ✅ Enrolls in courses (if any)
+11. ✅ Creates payment record
+12. ✅ Generates invoice
+13. ✅ Forwards to n8n workflow
+
+================================================================================
+🧪 TEST RESULTS YOU SHOULD SEE:
+================================================================================
+
+SUCCESS RESPONSE:
+✅ HTTP 200 (empty response body)
+✅ Order status changed to "paid"
+✅ Payment status changed to "paid"  
+✅ paid_at timestamp set
+✅ New order alert triggered
+✅ Invoice generated
+
+FAILURE RESPONSES:
+❌ HTTP 400: "Invalid signature" (wrong signature)
+❌ HTTP 400: "Amount mismatch" (wrong amount)
+❌ HTTP 400: "Order not found" (wrong m_payment_id)
+❌ HTTP 400: "No m_payment_id" (missing payment ID)
+❌ HTTP 500: "Missing Supabase config" (env vars not set)
+
+================================================================================
+🔍 VERIFY THE ORDER WAS MARKED AS PAID:
+================================================================================
+
+After sending the webhook, run this query to verify:
+
+SELECT 
+    order_number,
+    status,
+    payment_status,
+    total,
+    buyer_email,
+    paid_at
+FROM public.orders 
+WHERE id = 'c7c88c8d-a961-4692-9ae7-fbfacf151e88';
+
+EXPECTED RESULT:
+- status: "paid"
+- payment_status: "paid"  
+- paid_at: [timestamp]
+
+================================================================================
+💡 TIPS FOR DEBUGGING:
+================================================================================
+
+1. Check PayFast ITN logs in your Netlify function logs
+2. Verify all field names are exactly as shown (case-sensitive)
+3. Ensure amount has exactly 2 decimal places (290.00 not 290)
+4. Payment status must be "COMPLETE" (uppercase)
+5. Check that your m_payment_id matches exactly: "BL-19AC5A26DD5"
+
+================================================================================
+⚠️  IMPORTANT NOTES:
+================================================================================
+
+- This is a TEST webhook - not a real PayFast notification
+- The signature is pre-generated for testing purposes
+- In production, PayFast generates the signature automatically
+- The webhook is idempotent - you can run it multiple times safely
+- Only marks as paid if status is not already "paid"
+
+================================================================================

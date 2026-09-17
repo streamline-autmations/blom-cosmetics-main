@@ -10,16 +10,23 @@ import { StickyCart } from '../cart/StickyCart';
 import { cartStore, showNotification } from '../../lib/cart';
 import { FREE_SHIPPING_THRESHOLD_LABEL } from '../../lib/shipping';
 import { ShareButton } from '../ui/ShareButton';
-import {
-  Star,
-  Heart,
-  Plus,
+import { 
+  Star, 
+  Heart, 
+  Share2, 
+  ShoppingCart, 
+  Plus, 
   Minus,
+  Check,
   Truck,
   Shield,
   RotateCcw,
   ChevronLeft,
   ChevronRight,
+  ChevronDown,
+  ChevronUp,
+  Leaf,
+  Award,
   MessageCircle,
   Phone
 } from 'lucide-react';
@@ -77,6 +84,8 @@ export const ProductPageTemplate: React.FC<ProductPageTemplateProps> = ({ produc
   const [selectedImage, setSelectedImage] = useState(0);
   const [selectedVariant, setSelectedVariant] = useState(product.variants[0] || '');
   const [quantity, setQuantity] = useState(1);
+  const [activeTab, setActiveTab] = useState<'overview' | 'features' | 'how-to-use' | 'ingredients' | 'details'>('overview');
+  const [expandedAccordion, setExpandedAccordion] = useState<string | null>('overview');
   const [isWishlisted, setIsWishlisted] = useState(false);
 
   // Set page title and meta description
@@ -117,7 +126,22 @@ export const ProductPageTemplate: React.FC<ProductPageTemplateProps> = ({ produc
     setSelectedImage((prev) => (prev - 1 + product.images.length) % product.images.length);
   };
 
+  const toggleAccordion = (section: string) => {
+    setExpandedAccordion(expandedAccordion === section ? null : section);
+  };
 
+  const getClaimIcon = (claim: string) => {
+    switch (claim.toLowerCase()) {
+      case 'vegan':
+        return <Leaf className="h-4 w-4 text-green-500" />;
+      case 'cruelty-free':
+        return <Heart className="h-4 w-4 text-pink-500" />;
+      case 'hema-free':
+        return <Shield className="h-4 w-4 text-blue-500" />;
+      default:
+        return <Award className="h-4 w-4 text-purple-500" />;
+    }
+  };
 
   // ==============================================================================
   // 1. ADVANCED CONTENT CHECKER (Filters out "Ghost" Data)

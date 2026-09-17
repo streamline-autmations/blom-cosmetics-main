@@ -1,0 +1,155 @@
+suburb,city,province,postal_code
+Sandton,Johannesburg,Gauteng,2196
+Rosebank,Johannesburg,Gauteng,2196
+Bryanston,Johannesburg,Gauteng,2021
+Morningside,Sandton,Gauteng,2057
+Fourways,Johannesburg,Gauteng,2055
+Midrand,Johannesburg,Gauteng,1685
+Centurion,Pretoria,Gauteng,0157
+Hatfield,Pretoria,Gauteng,0083
+Brooklyn,Pretoria,Gauteng,0181
+Menlyn,Pretoria,Gauteng,0181
+Waterkloof,Pretoria,Gauteng,0181
+Sunnyside,Pretoria,Gauteng,0132
+Arcadia,Pretoria,Gauteng,0007
+Rivonia,Sandton,Gauteng,2128
+Melville,Johannesburg,Gauteng,2109
+Parktown,Johannesburg,Gauteng,2193
+Houghton,Johannesburg,Gauteng,2041
+Killarney,Johannesburg,Gauteng,2193
+Greenside,Johannesburg,Gauteng,2034
+Randburg,Johannesburg,Gauteng,2125
+Ferndale,Randburg,Gauteng,2160
+Cresta,Randburg,Gauteng,2118
+Blairgowrie,Randburg,Gauteng,2194
+Dunkeld,Johannesburg,Gauteng,2196
+Athol,Johannesburg,Gauteng,2196
+Rivonia,Sandton,Gauteng,2128
+Woodmead,Sandton,Gauteng,2148
+Morningside,Sandton,Gauteng,2057
+Douglasdale,Johannesburg,Gauteng,2021
+Dainfern,Sandton,Gauteng,2055
+Greenstone,Edenvale,Gauteng,1609
+Edenvale,Edenvale,Gauteng,1610
+Bedfordview,Edenvale,Gauteng,2008
+Germiston,Germiston,Gauteng,1400
+Kempton Park,Kempton Park,Gauteng,1620
+Boksburg,Boksburg,Gauteng,1460
+Benoni,Benoni,Gauteng,1501
+Springs,Springs,Gauteng,1560
+Nigel,Nigel,Gauteng,1490
+Vereeniging,Vereeniging,Gauteng,1930
+Sasolburg,Sasolburg,Free State,1947
+Parys,Parys,Free State,9585
+Potchefstroom,Potchefstroom,North West,2520
+Klerksdorp,Klerksdorp,North West,2570
+Rustenburg,Rustenburg,North West,0300
+Brits,Brits,North West,0250
+Mafikeng,Mafikeng,North West,2745
+Bloemfontein,Bloemfontein,Free State,9301
+Welkom,Welkom,Free State,9460
+Kroonstad,Kroonstad,Free State,9500
+Bethlehem,Bethlehem,Free State,9700
+Harrismith,Harrismith,Free State,9880
+Cape Town,Cape Town,Western Cape,8001
+Sea Point,Cape Town,Western Cape,8005
+Green Point,Cape Town,Western Cape,8005
+Claremont,Cape Town,Western Cape,7708
+Newlands,Cape Town,Western Cape,7700
+Rondebosch,Cape Town,Western Cape,7700
+Observatory,Cape Town,Western Cape,7925
+Mowbray,Cape Town,Western Cape,7700
+Woodstock,Cape Town,Western Cape,7925
+Salt River,Cape Town,Western Cape,7925
+Gardens,Cape Town,Western Cape,8001
+V&A Waterfront,Cape Town,Western Cape,8001
+Camps Bay,Cape Town,Western Cape,8040
+Hout Bay,Cape Town,Western Cape,7872
+Constantia,Cape Town,Western Cape,7848
+Tokai,Cape Town,Western Cape,7945
+Bergvliet,Cape Town,Western Cape,7945
+Wynberg,Cape Town,Western Cape,7800
+Plumstead,Cape Town,Western Cape,7801
+Diep River,Cape Town,Western Cape,7800
+Bishopscourt,Cape Town,Western Cape,7708
+Kenilworth,Cape Town,Western Cape,7708
+Claremont,Cape Town,Western Cape,7708
+Pinelands,Cape Town,Western Cape,7405
+Maitland,Cape Town,Western Cape,7404
+Goodwood,Cape Town,Western Cape,7460
+Parow,Cape Town,Western Cape,7500
+Bellville,Bellville,Western Cape,7535
+Tygerberg,Bellville,Western Cape,7530
+Durbanville,Durbanville,Western Cape,7550
+Brackenfell,Brackenfell,Western Cape,7560
+Kraaifontein,Kraaifontein,Western Cape,7570
+Somerset West,Somerset West,Western Cape,7130
+Strand,Strand,Western Cape,7140
+Gordon's Bay,Gordon's Bay,Western Cape,7140
+Paarl,Paarl,Western Cape,7646
+Stellenbosch,Stellenbosch,Western Cape,7600
+Franschhoek,Franschhoek,Western Cape,7690
+Worcester,Worcester,Western Cape,6850
+Robertson,Robertson,Western Cape,6705
+Durban,Durban,KwaZulu-Natal,4001
+Berea,Durban,KwaZulu-Natal,4001
+Musgrave,Durban,KwaZulu-Natal,4001
+Morningside,Durban,KwaZulu-Natal,4001
+Glenwood,Durban,KwaZulu-Natal,4001
+Florida Road,Durban,KwaZulu-Natal,4001
+Umhlanga,Umhlanga,KwaZulu-Natal,4320
+Ballito,Ballito,KwaZulu-Natal,4420
+Hillcrest,Hillcrest,KwaZulu-Natal,3610
+Kloof,Kloof,KwaZulu-Natal,3640
+Pinetown,Pinetown,KwaZulu-Natal,3610
+Westville,Westville,KwaZulu-Natal,3630
+Chatsworth,Chatsworth,KwaZulu-Natal,4092
+Phoenix,Phoenix,KwaZulu-Natal,4068
+Tongaat,Tongaat,KwaZulu-Natal,4400
+Verulam,Verulam,KwaZulu-Natal,4340
+Pietermaritzburg,Pietermaritzburg,KwaZulu-Natal,3201
+Richards Bay,Richards Bay,KwaZulu-Natal,3900
+Newcastle,Newcastle,KwaZulu-Natal,2940
+Ladysmith,Ladysmith,KwaZulu-Natal,3370
+Port Shepstone,Port Shepstone,KwaZulu-Natal,4240
+Margate,Margate,KwaZulu-Natal,4275
+Port Elizabeth,Port Elizabeth,Eastern Cape,6001
+Summerstrand,Port Elizabeth,Eastern Cape,6001
+Humewood,Port Elizabeth,Eastern Cape,6001
+Richmond Hill,Port Elizabeth,Eastern Cape,6001
+Central,Port Elizabeth,Eastern Cape,6001
+Newton Park,Port Elizabeth,Eastern Cape,6045
+Greenacres,Port Elizabeth,Eastern Cape,6045
+Walmer,Port Elizabeth,Eastern Cape,6065
+Somerset East,Somerset East,Eastern Cape,5850
+Grahamstown,Grahamstown,Eastern Cape,6139
+East London,East London,Eastern Cape,5200
+Nahoon,East London,Eastern Cape,5241
+Quigney,East London,Eastern Cape,5201
+Cambridge,Cambridge,Eastern Cape,5200
+Buffalo City,Buffalo City,Eastern Cape,5200
+Bloemfontein,Bloemfontein,Free State,9301
+Westdene,Bloemfontein,Free State,9301
+Langenhovenpark,Bloemfontein,Free State,9330
+Willows,Bloemfontein,Free State,9301
+Bayswater,Bloemfontein,Free State,9301
+Polokwane,Polokwane,Limpopo,0700
+Tzaneen,Tzaneen,Limpopo,0850
+Mokopane,Mokopane,Limpopo,0600
+Phalaborwa,Phalaborwa,Limpopo,1390
+Thohoyandou,Thohoyandou,Limpopo,0950
+Nelspruit,Nelspruit,Mpumalanga,1200
+White River,White River,Mpumalanga,1240
+Hazyview,Hazyview,Mpumalanga,1242
+Sabie,Sabie,Mpumalanga,1260
+Barberton,Barberton,Mpumalanga,1300
+Witbank,Witbank,Mpumalanga,1035
+Middelburg,Middelburg,Mpumalanga,1055
+Bethal,Bethal,Mpumalanga,2310
+Standerton,Standerton,Mpumalanga,2430
+Secunda,Secunda,Mpumalanga,2302
+Kimberley,Kimberley,Northern Cape,8300
+Upington,Upington,Northern Cape,8800
+Kuruman,Kuruman,Northern Cape,8460
+Springbok,Springbok,Northern Cape,8240
+De Aar,De Aar,Northern Cape,7000

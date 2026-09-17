@@ -1176,6 +1176,18 @@ button {
   background-color: #dbeafe !important;
 }
 
+.btn.checkout-review-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn.checkout-review-action > span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
 @media (max-width: 640px) {
   .btn.checkout-review-action {
     padding: 0.65rem 1rem;

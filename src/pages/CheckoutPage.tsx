@@ -1107,7 +1107,7 @@ export const CheckoutPage: React.FC = () => {
 
           <div className="grid lg:grid-cols-3 gap-8">
             {/* Main Content */}
-            <div className="lg:col-span-2">
+            <div className="lg:col-span-2 min-w-0">
               <AnimatePresence mode="wait">
               {/* Shipping Information */}
               {step === 'shipping' && (
@@ -1676,7 +1676,7 @@ export const CheckoutPage: React.FC = () => {
                               className="w-10 h-10 sm:w-16 sm:h-16 object-cover rounded flex-shrink-0"
                             />
                             <div className="flex-1 min-w-0">
-                              <h4 className="font-medium text-sm sm:text-base truncate">{item.name}</h4>
+                              <h4 className="font-medium text-sm sm:text-base leading-snug break-words">{item.name}</h4>
                               {item.variant && (
                                 <p className="text-xs sm:text-sm text-gray-500">{item.variant.title}</p>
                               )}
@@ -1739,7 +1739,7 @@ export const CheckoutPage: React.FC = () => {
             </div>
 
             {/* Order Summary Sidebar */}
-            <div className="lg:col-span-1">
+            <div className="lg:col-span-1 min-w-0">
               <Card className="sticky top-8">
                 <CardHeader>
                   <h3 className="text-xl font-bold">Order Summary</h3>
@@ -1770,7 +1770,7 @@ export const CheckoutPage: React.FC = () => {
                             value={couponCode}
                             onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
                             placeholder="Enter code"
-                            className="flex-1 px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-pink-300 focus:border-pink-400 outline-none"
+                            className="flex-1 min-w-0 px-3 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-pink-300 focus:border-pink-400 outline-none"
                             disabled={isApplyingCoupon}
                           />
                           <button

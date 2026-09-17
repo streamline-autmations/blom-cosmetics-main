@@ -1861,7 +1861,7 @@ export const CourseDetailPage: React.FC = () => {
               
               <div className="grid md:grid-cols-2 gap-8">
                 {/* Location */}
-                <div className="p-10 md:p-12 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 text-center" style={{ backgroundColor: '#CEE5FF' }}>
+                <div className="min-w-0 break-words p-6 sm:p-10 md:p-12 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 text-center" style={{ backgroundColor: '#CEE5FF' }}>
                   <div className="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-5">
                     <MapPin className="h-8 w-8 text-pink-400" />
                   </div>
@@ -1890,7 +1890,7 @@ export const CourseDetailPage: React.FC = () => {
                 </div>
 
                 {/* Payment Info */}
-                <div className="p-10 md:p-12 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 text-center" style={{ backgroundColor: '#CEE5FF' }}>
+                <div className="min-w-0 break-words p-6 sm:p-10 md:p-12 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 text-center" style={{ backgroundColor: '#CEE5FF' }}>
                   <div className="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-5">
                     <CreditCard className="h-8 w-8 text-pink-400" />
                   </div>
@@ -1915,7 +1915,7 @@ export const CourseDetailPage: React.FC = () => {
                   const displayDates = activeInstructor?.availableDates ?? course.availableDates;
                   const scheduleImages: { src: string; alt: string }[] = activeInstructor?.scheduleImages ?? [];
                   return (
-                    <div className="p-10 md:p-12 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 text-center" style={{ backgroundColor: '#CEE5FF' }}>
+                    <div className="min-w-0 break-words p-6 sm:p-10 md:p-12 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 text-center" style={{ backgroundColor: '#CEE5FF' }}>
                       <div className="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-5">
                         <Calendar className="h-8 w-8 text-pink-400" />
                       </div>
@@ -1982,7 +1982,7 @@ export const CourseDetailPage: React.FC = () => {
                 })()}
 
                 {!course.isOnline && course.thingsToBring.length > 0 && (
-                  <div className="p-10 md:p-12 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 text-center" style={{ backgroundColor: '#CEE5FF' }}>
+                  <div className="min-w-0 break-words p-6 sm:p-10 md:p-12 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 text-center" style={{ backgroundColor: '#CEE5FF' }}>
                     <div className="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-5">
                       <Package className="h-8 w-8 text-pink-400" />
                     </div>
@@ -2002,7 +2002,7 @@ export const CourseDetailPage: React.FC = () => {
                   const activeInstructor = (course as any).instructors?.[selectedInstructorIndex];
                   const displaySchedule = activeInstructor?.trainingSchedule ?? course.trainingSchedule;
                   return displaySchedule.length > 0 && displaySchedule.map((block: any) => (
-                    <div key={block.title} className="p-10 md:p-12 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 text-center" style={{ backgroundColor: '#CEE5FF' }}>
+                    <div key={block.title} className="min-w-0 break-words p-6 sm:p-10 md:p-12 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 text-center" style={{ backgroundColor: '#CEE5FF' }}>
                       <div className="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-5">
                         <Clock className="h-8 w-8 text-pink-400" />
                       </div>
@@ -2020,7 +2020,7 @@ export const CourseDetailPage: React.FC = () => {
                 })()}
 
                 {!course.isOnline && course.studentDiscount.length > 0 && (
-                  <div className="p-10 md:p-12 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 text-center" style={{ backgroundColor: '#CEE5FF' }}>
+                  <div className="min-w-0 break-words p-6 sm:p-10 md:p-12 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 text-center" style={{ backgroundColor: '#CEE5FF' }}>
                     <div className="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-5">
                       <Ticket className="h-8 w-8 text-pink-400" />
                     </div>
@@ -2037,7 +2037,7 @@ export const CourseDetailPage: React.FC = () => {
                 )}
 
                 {/* Contact */}
-                <div className="p-10 md:p-12 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 text-center" style={{ backgroundColor: '#CEE5FF' }}>
+                <div className="min-w-0 break-words p-6 sm:p-10 md:p-12 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 text-center" style={{ backgroundColor: '#CEE5FF' }}>
                   <div className="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mx-auto mb-5">
                     <Phone className="h-8 w-8 text-pink-400" />
                   </div>
@@ -2414,7 +2414,7 @@ export const CourseDetailPage: React.FC = () => {
                           name="countryCode"
                           value={formData.countryCode}
                           onChange={handleInputChange}
-                          className="w-32 px-3 py-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-300 focus:border-pink-400 outline-none transition-all text-base"
+                          className="w-28 sm:w-32 flex-shrink-0 px-3 py-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-pink-300 focus:border-pink-400 outline-none transition-all text-base"
                         >
                           {countryCodes.map((country) => (
                             <option key={country.code} value={country.code}>
@@ -2428,7 +2428,7 @@ export const CourseDetailPage: React.FC = () => {
                           value={formData.phone}
                           onChange={handleInputChange}
                           placeholder="123456789"
-                          className={`flex-1 px-4 py-4 border rounded-xl focus:ring-2 focus:ring-pink-300 focus:border-pink-400 outline-none transition-all text-base ${
+                          className={`flex-1 min-w-0 px-4 py-4 border rounded-xl focus:ring-2 focus:ring-pink-300 focus:border-pink-400 outline-none transition-all text-base ${
                             formErrors.phone ? 'border-red-500' : 'border-gray-300'
                           }`}
                           required
@@ -2462,7 +2462,7 @@ export const CourseDetailPage: React.FC = () => {
                       <button
                           type="submit"
                         disabled={isSubmitting || !selectedPackage || !selectedDate || !formData.terms}
-                        className="w-full bg-pink-400 hover:bg-transparent text-white hover:text-black font-bold py-5 px-6 rounded-full text-lg uppercase tracking-wide transition-all duration-300 border-2 border-transparent hover:border-black disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-pink-400 disabled:hover:text-white disabled:hover:border-transparent"
+                        className="w-full bg-pink-400 hover:bg-transparent text-white hover:text-black font-bold py-4 sm:py-5 px-5 sm:px-6 rounded-full text-sm sm:text-lg uppercase tracking-normal sm:tracking-wide transition-all duration-300 border-2 border-transparent hover:border-black disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-pink-400 disabled:hover:text-white disabled:hover:border-transparent"
                         style={{ boxShadow: '0 4px 15px rgba(255,116,164,0.3)' }}
                       >
                         {isSubmitting

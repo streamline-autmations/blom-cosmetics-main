@@ -4,21 +4,17 @@ import { Footer } from '../components/layout/Footer';
 import { Container } from '../components/layout/Container';
 import { Button } from '../components/ui/Button';
 import { LoadingSpinner } from '../components/ui/LoadingSpinner';
-import { 
-  Package, 
-  TrendingUp, 
-  TrendingDown, 
-  AlertTriangle, 
-  Plus, 
-  Minus, 
-  Settings, 
+import {
+  Package,
+  TrendingUp,
+  TrendingDown,
+  AlertTriangle,
+  Plus,
+  Settings,
   RefreshCw,
   Eye,
-  Calendar,
   Filter,
   Download,
-  Edit,
-  Save,
   X
 } from 'lucide-react';
 

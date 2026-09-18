@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { Header } from '../components/layout/Header';
 import { Footer } from '../components/layout/Footer';
 import { Container } from '../components/layout/Container';
@@ -24,7 +24,7 @@ export default function CheckoutSuccess() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ order_id: orderId })
       }).catch(err => console.error('Background trigger error:', err));
-    } catch (e) { /* ignore */ }
+    } catch { /* ignore */ }
     
     // Poll for 45 seconds (30 attempts x 1.5s)
     for (let i = 0; i < 30; i++) {
@@ -90,7 +90,7 @@ export default function CheckoutSuccess() {
             checkStatus(parsed.orderId);
             return;
           }
-        } catch (e) {}
+        } catch { /* malformed cached order payload — fall through to the not-found path */ }
       }
       setStatus('not-found');
     }

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Header } from '../components/layout/Header';
 import { Footer } from '../components/layout/Footer';
 import { Container } from '../components/layout/Container';
@@ -13,7 +13,6 @@ export default function InvoiceViewer() {
     // Get order ID from URL params
     const urlParams = new URLSearchParams(window.location.search);
     const id = urlParams.get('m_payment_id');
-    const fallback = urlParams.get('fallback') === '1';
     if (id) {
       setOrderId(id);
       setLoading(false);

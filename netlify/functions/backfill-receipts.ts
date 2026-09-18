@@ -33,7 +33,7 @@ export const handler = async (event: any) => {
         const url = `${SITE}/.netlify/functions/invoice-generate-pdf?m_payment_id=${encodeURIComponent(o.m_payment_id)}`
         const r = await fetch(url)
         if (r.ok) ok++
-      } catch {}
+      } catch { /* one failed receipt must not abort the backfill loop */ }
     }
 
     return { statusCode: 200, body: JSON.stringify({ processed: orders.length, generated: ok }) }

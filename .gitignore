@@ -1,3 +1,19 @@
+# Dependencies
+node_modules
+
+# Build output
+dist
+dist-ssr
+*.local
+tsconfig.tsbuildinfo
+
+# Environment — never commit real values. See .env.example for the schema.
+.env
+.env.*
+!.env.example
+.env_folder_backup/
+
+# Logs
 logs
 *.log
 npm-debug.log*
@@ -6,36 +22,38 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
-
+# Editors / OS
 .vscode/*
 !.vscode/extensions.json
 .idea
 .DS_Store
+Thumbs.db
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
-.env
-.trae/
+nul
 
-# Local Netlify folder
+# Local tooling (Netlify CLI, Supabase CLI)
 .netlify
+.supabase
 
-# Local tooling / build artifacts (not for the repo)
+# AI / agent tooling — local developer config, not part of the application
+.claude/
+.codex/
+.agents/
+.bolt/
 .kilo/
 .kilocode/
-.agents/*
-!.agents/skills/
-!.agents/skills/**
-.n8nac/
-.claude/settings.local.json
-nul
-tsconfig.tsbuildinfo
+.trae/
+.cursor/
+.mcp.json
+CLAUDE.md
+AGENTS.md
 
-# Local incident notes - contain customer data, never commit
+# Local incident notes — may contain customer data, never commit
 INCIDENT_*.md
+
+# Generated script output
+products_list.txt

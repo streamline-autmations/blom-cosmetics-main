@@ -1,34 +1,6 @@
 import type { Handler } from '@netlify/functions';
 
-interface StockMovement {
-  id: string;
-  product_id: string;
-  product_name: string;
-  movement_type: 'sale' | 'restock' | 'adjustment' | 'return' | 'damage';
-  quantity: number;
-  current_stock: number;
-  unit_price?: number;
-  total_value?: number;
-  reference_id?: string;
-  reference_type?: string;
-  notes?: string;
-  created_at: string;
-  created_by?: string;
-}
 
-interface StockSummary {
-  total_products: number;
-  low_stock_products: number;
-  out_of_stock_products: number;
-  total_inventory_value: number;
-  recent_movements_count: number;
-  top_moving_products: Array<{
-    product_id: string;
-    product_name: string;
-    total_sold: number;
-    current_stock: number;
-  }>;
-}
 
 export const handler: Handler = async (event) => {
   try {

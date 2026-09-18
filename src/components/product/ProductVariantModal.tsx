@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, ShoppingCart, Check, Plus, Minus } from 'lucide-react';
+import { X, ShoppingCart, Check } from 'lucide-react';
 import { cartStore, showNotification } from '../../lib/cart';
 
 interface ProductVariant {
@@ -32,7 +32,7 @@ export const ProductVariantModal: React.FC<ProductVariantModalProps> = ({
   onVariantSelect
 }) => {
   const [selectedVariant, setSelectedVariant] = useState<string>('');
-  const [quantity, setQuantity] = useState(initialQuantity);
+  const [quantity] = useState(initialQuantity);
   const [loading, setLoading] = useState(false);
 
   // Initialize selected variant when modal opens
@@ -90,10 +90,6 @@ export const ProductVariantModal: React.FC<ProductVariantModalProps> = ({
     }
   };
 
-  const getSelectedVariantPrice = () => {
-    const selectedVariantData = product.variants.find(v => v.name === selectedVariant);
-    return selectedVariantData?.price || product.price;
-  };
 
   const isVariantSelected = (variantName: string) => {
     return selectedVariant === variantName;

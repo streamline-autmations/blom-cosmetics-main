@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Search, X, Star, ShoppingCart, Heart } from 'lucide-react';
+import { Search, X, ShoppingCart, Heart } from 'lucide-react';
 import { cartStore } from '../../lib/cart';
 import { wishlistStore } from '../../lib/wishlist';
 import { ProductVariantModal } from '../product/ProductVariantModal';

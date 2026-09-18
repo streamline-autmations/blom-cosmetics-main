@@ -58,13 +58,13 @@ export const BirthdayBundlePopup: React.FC = () => {
         localStorage.setItem(VISITS_KEY, String(visits));
         sessionStorage.setItem(SESSION_KEY, '1');
       }
-    } catch {}
+    } catch { /* storage unavailable (private mode / quota) — popup timing is best-effort */ }
 
     // Not due yet this visit.
     if (visits < showAt) return;
 
     // Schedule the next appearance 3–5 visits out so it won't reopen this session.
-    try { localStorage.setItem(SHOW_AT_KEY, String(visits + nextInterval())); } catch {}
+    try { localStorage.setItem(SHOW_AT_KEY, String(visits + nextInterval())); } catch { /* storage unavailable (private mode / quota) — popup timing is best-effort */ }
 
     // Don't collide with the Beauty Club popup's auto-timer this visit.
     if (typeof window !== 'undefined') {

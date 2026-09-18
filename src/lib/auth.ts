@@ -3,7 +3,8 @@ import { supabase } from './supabase';
 
 export interface User {
   id: string;
-  email: string;
+  /** Supabase returns this as optional (e.g. phone-only identities), so callers must handle undefined. */
+  email?: string;
   created_at: string;
   user_metadata?: any;
 }
@@ -240,7 +241,7 @@ class AuthService {
         year: 'numeric',
         month: 'long'
       });
-    } catch (error) {
+    } catch {
       return 'Unknown';
     }
   }

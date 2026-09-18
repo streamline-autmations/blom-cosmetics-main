@@ -9,7 +9,7 @@ declare global {
 import { Header } from '../components/layout/Header';
 import { Footer } from '../components/layout/Footer';
 import { Container } from '../components/layout/Container';
-import { Card, CardContent, CardHeader } from '../components/ui/Card';
+import { Card, CardContent } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { ClickableContact } from '../components/ui/ClickableContact';
 import { StockistLocator } from '../components/stockists/StockistLocator';
@@ -21,12 +21,7 @@ import {
   HelpCircle,
   ChevronDown,
   ChevronUp,
-  Building,
-  ShoppingCart,
-  BookOpen,
-  Heart,
   CheckCircle,
-  Paperclip,
   Upload,
   X,
   FileText,
@@ -44,7 +39,7 @@ export const ContactPage: React.FC = () => {
     message: '',
     inquiryType: 'general'
   });
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitting] = useState(false);
   const [expandedFaq, setExpandedFaq] = useState<number | null>(null);
   const [attachedFiles, setAttachedFiles] = useState<File[]>([]);
   const [dragActive, setDragActive] = useState(false);
@@ -128,41 +123,6 @@ export const ContactPage: React.FC = () => {
     }
   ];
 
-  // Validation functions
-  const validateEmail = (email: string): boolean => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
-
-  const validatePhone = (phone: string): boolean => {
-    // Remove all non-digit characters for validation
-    const cleanPhone = phone.replace(/\D/g, '');
-    // Check if phone has at least 7 digits and max 15 digits
-    return cleanPhone.length >= 7 && cleanPhone.length <= 15;
-  };
-
-  const validateForm = (): boolean => {
-    const errors: {[key: string]: string} = {};
-
-    // Email validation
-    if (formData.email && !validateEmail(formData.email)) {
-      errors.email = 'Please enter a valid email address';
-    }
-
-    // Phone validation (only if phone is provided)
-    if (formData.phone && !validatePhone(formData.phone)) {
-      errors.phone = 'Please enter a valid phone number (7-15 digits)';
-    }
-
-    // Terms and conditions validation
-    if (!agreedToTerms) {
-      errors.terms = 'You must agree to the Terms & Conditions and Privacy Policy';
-    }
-
-    setValidationErrors(errors);
-    return Object.keys(errors).length === 0;
-  };
-
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
     setAttachedFiles(prev => [...prev, ...files]);
@@ -207,7 +167,7 @@ export const ContactPage: React.FC = () => {
   };
 
   // Form submission is now handled by the script, but we keep this for validation
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = () => {
     // Let the script handle the submission
     // This function is kept for any React-specific validation if needed
   };

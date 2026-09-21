@@ -26,9 +26,12 @@ export const handler: Handler = async (event) => {
     return { statusCode: 500, headers, body: JSON.stringify({ error: 'Server config missing' }) }
   }
  
-  const env = process.env.CONTEXT === 'production' ? 'production' : 'staging'
-  if (env === 'production') {
-    return { statusCode: 403, headers, body: 'Forbidden' }
+  // Default-deny. Netlify sets CONTEXT at build time and does not expose it to the function
+  // runtime, so the previous `CONTEXT === 'production'` check silently passed in production
+  // — verified against the live site, where this endpoint accepted the leaked
+  // TEST_ITN_SECRET and processed a real request. Opt in explicitly instead.
+  if (process.env.ALLOW_TEST_ENDPOINTS !== 'true') {
+    return { statusCode: 404, headers, body: 'Not Found' }
   }
  
   const auth = event.headers['x-test-itn-secret'] || event.headers['X-Test-ITN-Secret']

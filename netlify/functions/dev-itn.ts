@@ -14,11 +14,15 @@ function signITN(fields: Record<string, any>, passphrase?: string): string {
 
 export const handler: Handler = async (event) => {
   try {
-    // Never in production. This endpoint forges a signed COMPLETE ITN for any order, so it
-    // can mark orders paid — which now also creates affiliate commission. TEST_ITN_SECRET
-    // alone is not a sufficient guard: it was committed to a public repo and remains in git
-    // history. Same block as test-mark-order-paid.ts.
-    if (process.env.CONTEXT === 'production') {
+    // Default-deny. This endpoint forges a signed COMPLETE ITN for any order, so it can
+    // mark orders paid — which also creates affiliate commission. TEST_ITN_SECRET is not a
+    // sufficient guard on its own: it was committed to a public repo and is still in git
+    // history.
+    //
+    // Do NOT gate this on `CONTEXT === 'production'`. Netlify sets CONTEXT at build time
+    // and does not expose it to the function runtime, so that check silently passes in
+    // production — verified against the live site. Opt in explicitly instead.
+    if (process.env.ALLOW_TEST_ENDPOINTS !== 'true') {
       return { statusCode: 404, body: 'Not Found' }
     }
 

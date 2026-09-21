@@ -692,18 +692,24 @@ export const ShopPage: React.FC = () => {
               <div className="flex items-center justify-center px-4 gap-3">
                 <button 
                   onClick={() => setViewMode('grid-1')}
+                  aria-label="Single column view"
+                  aria-pressed={viewMode === 'grid-1'}
                   className={`${viewMode === 'grid-1' ? 'text-pink-600' : 'text-gray-300'}`}
                 >
                   <Square className="w-5 h-5" />
                 </button>
                 <button 
                   onClick={() => setViewMode('grid-2')}
+                  aria-label="Two column view"
+                  aria-pressed={viewMode === 'grid-2'}
                   className={`${viewMode === 'grid-2' ? 'text-pink-600' : 'text-gray-300'}`}
                 >
                   <Grid2X2 className="w-5 h-5" />
                 </button>
                 <button 
                   onClick={() => setViewMode('grid-3')}
+                  aria-label="Three column view"
+                  aria-pressed={viewMode === 'grid-3'}
                   className={`${viewMode === 'grid-3' ? 'text-pink-600' : 'text-gray-300'}`}
                 >
                   <Grid3X3 className="w-5 h-5" />

@@ -4,19 +4,20 @@
   "description": "South Africa's leading provider of premium nail care products, professional acrylic systems, and expert beauty training.",
   "icons": [
     {
-      "src": "/blom-academy-favicon.webp",
-      "sizes": "any",
-      "type": "image/webp"
-    },
-    {
-      "src": "/favicon-32x32.png",
-      "sizes": "32x32",
+      "src": "/icon-192.png",
+      "sizes": "192x192",
       "type": "image/png"
     },
     {
-      "src": "/favicon-16x16.png",
-      "sizes": "16x16",
+      "src": "/icon-512.png",
+      "sizes": "512x512",
       "type": "image/png"
+    },
+    {
+      "src": "/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ],
   "start_url": "/",
@@ -26,19 +27,9 @@
   "orientation": "portrait-primary",
   "scope": "/",
   "lang": "en-ZA",
-  "categories": ["shopping", "beauty", "lifestyle"],
-  "screenshots": [
-    {
-      "src": "/blom-cosmetics-screenshot-1.webp",
-      "sizes": "1280x720",
-      "type": "image/webp",
-      "form_factor": "wide"
-    },
-    {
-      "src": "/blom-cosmetics-screenshot-2.webp",
-      "sizes": "750x1334",
-      "type": "image/webp",
-      "form_factor": "narrow"
-    }
+  "categories": [
+    "shopping",
+    "beauty",
+    "lifestyle"
   ]
 }

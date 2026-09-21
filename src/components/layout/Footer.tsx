@@ -86,7 +86,7 @@ export const Footer: React.FC = () => {
 
           <h5 className="newsletter-title">Newsletter Signup</h5>
           <form className="newsletter" id="footer-newsletter" noValidate onSubmit={onSubmit}>
-            <input className="newsletter-input" type="email" placeholder="Your email" required />
+            <input className="newsletter-input" type="email" placeholder="Your email" aria-label="Email address" required />
             <button className="btn btn-blue" type="submit">Subscribe</button>
           </form>
           <p className="newsletter-helper">Sign up for our newsletter and get exclusive discounts + updates.</p>

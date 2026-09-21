@@ -222,6 +222,7 @@ export const CartWidget: React.FC = () => {
               <h2 className="text-xl font-bold">Your Cart</h2>
               <button
                 onClick={() => setIsOpen(false)}
+                aria-label="Close cart"
                 className="p-2 hover:bg-gray-100 rounded-full transition-colors"
               >
                 <X className="h-5 w-5" />

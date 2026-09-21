@@ -60,6 +60,16 @@ export const OptimizedImage: React.FC<OptimizedImageProps> = ({
   
   const imageUrl = optimizedSrc.startsWith('http') ? optimizedSrc : `${site}${optimizedSrc}`;
 
+  // Cloudinary can resize on the fly, so offer width variants capped at 2x the rendered size
+  const isCloudinary = optimizedSrc.includes('res.cloudinary.com') && optimizedSrc.includes('/upload/');
+  const maxVariant = width ? width * 2 : 0;
+  const variantWidths = [200, 400, 600, 800, 1000, 1200].filter((w) => w <= maxVariant);
+  const srcSet = isCloudinary && variantWidths.length > 0
+    ? variantWidths
+        .map((w) => `${optimizedSrc.replace('/upload/', `/upload/w_${w},c_limit/`)} ${w}w`)
+        .join(', ')
+    : undefined;
+
   if (!src) {
     console.warn('OptimizedImage: src is missing for', alt);
   }
@@ -68,6 +78,7 @@ export const OptimizedImage: React.FC<OptimizedImageProps> = ({
     <>
       <img
         src={imageUrl}
+        srcSet={srcSet}
         alt={generateAltText()}
         title={generateTitle()}
         className={className}

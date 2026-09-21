@@ -122,18 +122,24 @@ Secrets live only in Netlify environment variables. Anything prefixed `VITE_` is
 
 ## Screenshots
 
-Screenshots are not yet included. Recommended captures, saved to `docs/screenshots/`:
+### Home
 
-| File | What to capture |
-|---|---|
-| `home.png` | Home page hero and featured products (desktop) |
-| `shop.png` | Shop page with filters open |
-| `product.png` | Product detail page with variants |
-| `course.png` | Course detail page showing instructor and date selection |
-| `checkout.png` | Checkout with delivery options (use test data only) |
-| `mobile.png` | Product page on a phone-width viewport |
+![Home](docs/screenshots/home-desktop.png)
 
-Use test orders and placeholder customer details. Do not capture real customer names, addresses, emails or order numbers.
+### Product detail
+
+![Product detail](docs/screenshots/product-desktop.png)
+
+### Checkout
+
+![Checkout](docs/screenshots/checkout-desktop.png)
+
+### Mobile storefront
+
+![Mobile storefront](docs/screenshots/mobile.png)
+
+Shop and course-page captures are also in `docs/screenshots/`. All customer fields in
+the checkout screenshot are placeholder test data, never a real order.
 
 ## Running locally
 

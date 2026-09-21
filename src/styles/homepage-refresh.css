@@ -1,7 +1,9 @@
 .home-page {
   --home-pink: #ff74a4;
   --home-pink-hover: #ff8bb5;
-  --home-pink-text: #ff74a4;
+  /* Deeper shade for small text on white: #ff74a4 only reaches 2.5:1 there.
+     Fills and decoration keep the brand pink above. */
+  --home-pink-text: #c2185b;
   --home-pink-soft: #fff0f5;
   --home-blue: #cee5ff;
   --home-blue-soft: #f2f7fd;
@@ -75,13 +77,13 @@
 
 .home-button--primary {
   background: var(--home-pink);
-  color: #ffffff;
+  color: #1a1a1a;
   box-shadow: 0 10px 24px rgba(255, 116, 164, 0.24);
 }
 
 .home-button--primary:hover {
   background: var(--home-pink-hover);
-  color: #ffffff;
+  color: #1a1a1a;
   transform: translateY(-1px);
   box-shadow: 0 14px 28px rgba(255, 116, 164, 0.3);
 }
@@ -89,13 +91,13 @@
 .home-button--secondary {
   border-color: #8ec5ff;
   background: #8ec5ff;
-  color: #ffffff;
+  color: #1a1a1a;
 }
 
 .home-button--secondary:hover {
   border-color: #a8d4ff;
   background: #a8d4ff;
-  color: #ffffff;
+  color: #1a1a1a;
 }
 
 .home-section-heading {
@@ -225,7 +227,7 @@
   border-radius: 999px;
   background: var(--home-pink);
   padding: 10px 16px;
-  color: #ffffff;
+  color: #1a1a1a;
   font-size: 0.72rem;
   font-weight: 800;
   letter-spacing: 0.08em;
@@ -268,14 +270,14 @@
   border: 1px solid var(--home-pink);
   border-radius: 50%;
   background: var(--home-pink);
-  color: #ffffff;
+  color: #1a1a1a;
   transition: border-color 180ms ease, background-color 180ms ease, color 180ms ease;
 }
 
 .home-hero__arrows button:hover {
   border-color: var(--home-pink-hover);
   background: var(--home-pink-hover);
-  color: #ffffff;
+  color: #1a1a1a;
 }
 
 .home-hero__arrows svg {
@@ -313,7 +315,7 @@
 
 .home-hero__tabs button.is-active {
   background: var(--home-pink);
-  color: #ffffff;
+  color: #1a1a1a;
 }
 
 .home-hero__count {
@@ -561,7 +563,7 @@ body[data-blom-route] .home-page main .home-products__grid button.bg-pink-500:ho
   place-items: center;
   border-radius: 50%;
   background: var(--home-pink);
-  color: #ffffff;
+  color: #1a1a1a;
 }
 
 .home-category-card__arrow svg {
@@ -698,7 +700,7 @@ body[data-blom-route] .home-page main .home-products__grid button.bg-pink-500:ho
   place-items: center;
   border-radius: 50%;
   background: var(--home-pink);
-  color: #ffffff;
+  color: #1a1a1a;
 }
 
 .academy-course__arrow svg {
@@ -928,13 +930,13 @@ body[data-blom-route] .home-page main .home-products__grid button.bg-pink-500:ho
   border: 1px solid var(--home-pink);
   border-radius: 50%;
   background: var(--home-pink);
-  color: #ffffff;
+  color: #1a1a1a;
 }
 
 .home-reviews__controls button:hover {
   border-color: var(--home-pink-hover);
   background: var(--home-pink-hover);
-  color: #ffffff;
+  color: #1a1a1a;
 }
 
 .home-reviews__controls svg {
@@ -1270,7 +1272,7 @@ body[data-blom-route] .home-page main .home-products__grid button.bg-pink-500:ho
 
 .review-modal__product-chip button:hover {
   background: var(--home-pink);
-  color: #ffffff;
+  color: #1a1a1a;
 }
 
 .review-modal__product-chip button svg {
@@ -1538,7 +1540,7 @@ body[data-blom-route] .home-page main .home-products__grid button.bg-pink-500:ho
   place-items: center;
   border-radius: 50%;
   background: var(--home-pink);
-  color: #ffffff;
+  color: #1a1a1a;
   box-shadow: 0 6px 18px rgba(23, 32, 51, 0.18);
   transition: transform 180ms ease, background-color 180ms ease;
 }

@@ -266,7 +266,12 @@ export const handler: Handler = async (event) => {
         body: JSON.stringify({
           status: 'paid',
           payment_status: 'paid',
-          paid_at: paidAt
+          paid_at: paidAt,
+          // PayFast's own transaction id. Without it an order cannot be matched
+          // against the PayFast portal, so a missed payment can only be found by
+          // exporting a CSV and comparing by hand.
+          pf_payment_id: data.pf_payment_id || null,
+          payfast_payment_id: data.pf_payment_id || null
         })
       })
 

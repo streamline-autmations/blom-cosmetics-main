@@ -201,7 +201,7 @@ const LoginScreen: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) => {
   );
 };
 
-const ReferralLink: React.FC<{ code: string; days: number; rate: number }> = ({ code, days, rate }) => {
+const ReferralLink: React.FC<{ code: string }> = ({ code }) => {
   const [copied, setCopied] = useState(false);
   const link = `${window.location.origin}/?ref=${code}`;
 
@@ -218,10 +218,6 @@ const ReferralLink: React.FC<{ code: string; days: number; rate: number }> = ({ 
   return (
     <section className="rounded-lg bg-[#CEE5FF]/40 p-5 ring-1 ring-[#CEE5FF]">
       <h2 className="text-sm font-semibold text-[#212529]">Your referral link</h2>
-      <p className="mt-1 text-sm text-[#343A40]">
-        Every sale from this link earns {(rate * 100).toFixed(0)}% commission, for {days} days after
-        the visitor clicks.
-      </p>
       <div className="mt-3 flex flex-col gap-2 sm:flex-row">
         <code className="flex-1 overflow-x-auto whitespace-nowrap rounded-md bg-white px-3 py-2.5 font-mono text-sm text-[#212529] ring-1 ring-black/5">
           {link}
@@ -315,11 +311,7 @@ const Dashboard: React.FC<{ data: Dashboard; onSignOut: () => void; onRefresh: (
       </header>
 
       <main className="mx-auto max-w-6xl space-y-8 px-4 py-8 sm:px-6">
-        <ReferralLink
-          code={affiliate.code}
-          days={affiliate.attribution_days}
-          rate={Number(affiliate.commission_rate)}
-        />
+        <ReferralLink code={affiliate.code} />
 
         {/* Commission is the number that matters — it gets its own block, not a fourth
             identical tile in a grid. */}
@@ -350,7 +342,7 @@ const Dashboard: React.FC<{ data: Dashboard; onSignOut: () => void; onRefresh: (
           <Metric label="Visitors referred" value={count(totals.unique_clicks)} hint={`${count(totals.clicks_30d)} in the last 30 days`} />
           <Metric label="Orders" value={count(totals.orders)} hint={`${conversion.toFixed(1)}% of referred visitors`} />
           <Metric label="Qualifying sales" value={money(totals.sales_cents)} hint="Excludes shipping and discounts" />
-          <Metric label="Commission rate" value={`${(Number(affiliate.commission_rate) * 100).toFixed(0)}%`} hint={`${affiliate.attribution_days}-day attribution`} />
+          <Metric label="Commission rate" value={`${(Number(affiliate.commission_rate) * 100).toFixed(0)}%`} />
         </section>
 
         <section>

@@ -14,6 +14,14 @@ function signITN(fields: Record<string, any>, passphrase?: string): string {
 
 export const handler: Handler = async (event) => {
   try {
+    // Never in production. This endpoint forges a signed COMPLETE ITN for any order, so it
+    // can mark orders paid — which now also creates affiliate commission. TEST_ITN_SECRET
+    // alone is not a sufficient guard: it was committed to a public repo and remains in git
+    // history. Same block as test-mark-order-paid.ts.
+    if (process.env.CONTEXT === 'production') {
+      return { statusCode: 404, body: 'Not Found' }
+    }
+
     // Guard: require TEST_ITN_SECRET header for security
     const auth = event.headers['x-test-itn-secret'] || event.headers['X-Test-ITN-Secret']
     if (!auth || auth !== process.env.TEST_ITN_SECRET) {

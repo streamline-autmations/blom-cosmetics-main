@@ -158,7 +158,10 @@ async function runFulfilment(order: any, notify: boolean) {
 }
 
 export async function runReconcile(opts: ReconcileOptions): Promise<ReconcileResult> {
-  const days = Math.min(Math.max(Number(opts.days) || 7, 1), 30);
+  // The caller's window is clamped here as well as in payflex-reconcile.ts.
+  // The old 30 day ceiling meant an order that slipped past a month could
+  // never be checked again, so an audit has to be able to reach further back.
+  const days = Math.min(Math.max(Number(opts.days) || 7, 1), 400);
   const { dryRun, notify } = opts;
   const since = new Date(Date.now() - days * 24 * 60 * 60 * 1000).toISOString();
 
@@ -170,7 +173,7 @@ export async function runReconcile(opts: ReconcileOptions): Promise<ReconcileRes
     .gte('created_at', since)
     .not('payflex_order_id', 'is', null)
     .order('created_at', { ascending: false })
-    .limit(100);
+    .limit(500);
 
   if (error) throw new Error(`DB error: ${error.message}`);
 

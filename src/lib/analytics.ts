@@ -91,7 +91,7 @@ class AdvancedAnalytics {
 
   constructor(config: AnalyticsConfig = {}) {
     this.config = {
-      googleAnalyticsId: config.googleAnalyticsId || 'G-XXXXXXXXXX', // Placeholder - remove analytics for now
+      googleAnalyticsId: config.googleAnalyticsId || 'G-H9GCB42G9C',
       facebookPixelId: config.facebookPixelId || 'YOUR_FACEBOOK_PIXEL_ID',
       hotjarId: config.hotjarId || undefined,
       enableDebug: config.enableDebug || false,

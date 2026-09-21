@@ -383,6 +383,7 @@ export const ProductPageTemplate: React.FC<ProductPageTemplateProps> = ({ produc
                   <div className="flex gap-3 pt-2">
                     <button
                       onClick={() => setIsWishlisted(!isWishlisted)}
+                      aria-label={isWishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
                       className="flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-full border-2 border-gray-300 hover:border-pink-400 transition-colors"
                     >
                       <Heart className={`h-5 w-5 ${isWishlisted ? 'fill-current text-pink-400' : 'text-gray-600'}`} />

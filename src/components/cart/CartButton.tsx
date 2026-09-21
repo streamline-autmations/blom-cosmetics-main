@@ -41,6 +41,7 @@ export const CartButton: React.FC<CartButtonProps> = ({ onClick, className = '' 
         if (trigger) (trigger as HTMLDivElement).click();
       }}
       className={`p-2.5 text-gray-700 hover:text-pink-400 transition-all duration-200 relative ${className}`}
+      aria-label="Open cart"
     >
       <ShoppingCart
         className={`h-6 w-6 transition-all duration-200 ${

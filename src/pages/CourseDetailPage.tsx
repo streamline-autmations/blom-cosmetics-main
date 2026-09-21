@@ -6,6 +6,7 @@ import { Container } from '../components/layout/Container';
 import { ClickableContact } from '../components/ui/ClickableContact';
 import { ScrollableTabRow } from '../components/ui/ScrollableTabRow';
 import { supabase } from '../lib/supabase';
+import { getAffiliateRef } from '../lib/affiliate';
 import { 
   Clock, 
   MapPin, 
@@ -1352,6 +1353,7 @@ export const CourseDetailPage: React.FC = () => {
         body: JSON.stringify({
           order_kind: 'course',
           m_payment_id: clientPaymentId,
+          affiliate_ref: getAffiliateRef(),
           buyer: {
             name: formData.name,
             email: formData.email,

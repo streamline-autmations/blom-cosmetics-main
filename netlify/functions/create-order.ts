@@ -10,6 +10,7 @@ import {
   CAT_EYE_TWO_FOR_OFFER_CODE,
 } from '../../src/lib/catEyeTwoForOffer'
 import { standardShippingCentsFor } from '../../src/lib/shipping'
+import { resolveAttribution } from './_lib/affiliate'
 import crypto from 'crypto'
 
 export const handler: Handler = async (event) => {
@@ -709,6 +710,82 @@ export const handler: Handler = async (event) => {
       )
       if (!discountSourceRes.ok) {
         console.warn('Could not persist order discount source:', await discountSourceRes.text())
+      }
+    }
+
+    // Affiliate attribution. Entirely non-fatal: a tracking failure must never stop a
+    // customer's order from being created.
+    if (order?.order_id) {
+      try {
+        const sbHeaders = {
+          apikey: SERVICE_KEY,
+          Authorization: `Bearer ${SERVICE_KEY}`,
+          'Content-Type': 'application/json'
+        }
+
+        // Read user_id back rather than trusting the client's token: it is set
+        // server-side by the attach_user_on_order trigger.
+        const ownerRes = await fetch(
+          `${SUPABASE_URL}/rest/v1/orders?id=eq.${encodeURIComponent(order.order_id)}&select=user_id`,
+          { headers: sbHeaders }
+        )
+        const userId = ownerRes.ok ? (await ownerRes.json())?.[0]?.user_id || null : null
+
+        const attribution = await resolveAttribution({
+          event,
+          bodyRef: body.affiliate_ref,
+          userId,
+          buyerEmail: body.shippingInfo?.email || body.buyer?.email || null,
+        })
+
+        if (attribution) {
+          const stampRes = await fetch(
+            `${SUPABASE_URL}/rest/v1/orders?id=eq.${encodeURIComponent(order.order_id)}`,
+            {
+              method: 'PATCH',
+              headers: sbHeaders,
+              body: JSON.stringify({
+                affiliate_id: attribution.affiliateId,
+                affiliate_code: attribution.code,
+                affiliate_click_id: attribution.clickId,
+                affiliate_attribution_method: attribution.method,
+                affiliate_attributed_at: new Date().toISOString()
+              })
+            }
+          )
+          if (!stampRes.ok) {
+            console.warn('Could not stamp affiliate on order:', await stampRes.text())
+          }
+
+          // Stamp the account so future orders attribute on any device, cookie or not.
+          //
+          // The stamp is NOT refreshed when the same affiliate is already recorded: the
+          // 30-day window has to run from the click that won the customer, otherwise every
+          // repeat purchase renews it and a regular customer is attributed forever.
+          // A different affiliate still takes over — last click wins between partners.
+          if (userId) {
+            const profileRes = await fetch(
+              `${SUPABASE_URL}/rest/v1/profiles?id=eq.${encodeURIComponent(userId)}&select=referred_by_affiliate_id`,
+              { headers: sbHeaders }
+            )
+            const existingAffiliateId = profileRes.ok
+              ? (await profileRes.json())?.[0]?.referred_by_affiliate_id || null
+              : null
+
+            if (existingAffiliateId !== attribution.affiliateId) {
+              await fetch(`${SUPABASE_URL}/rest/v1/profiles?id=eq.${encodeURIComponent(userId)}`, {
+                method: 'PATCH',
+                headers: sbHeaders,
+                body: JSON.stringify({
+                  referred_by_affiliate_id: attribution.affiliateId,
+                  referred_at: new Date().toISOString()
+                })
+              })
+            }
+          }
+        }
+      } catch (affiliateError: any) {
+        console.warn('Affiliate attribution skipped:', affiliateError?.message || affiliateError)
       }
     }
 

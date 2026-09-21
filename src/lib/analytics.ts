@@ -27,13 +27,6 @@ interface UserJourneyStep {
   properties?: Record<string, any>;
 }
 
-interface ABTTestVariant {
-  id: string;
-  name: string;
-  traffic_percentage: number;
-  conversion_rate: number;
-  variant_data: Record<string, any>;
-}
 
 interface Product {
   id: string;
@@ -98,7 +91,7 @@ class AdvancedAnalytics {
 
   constructor(config: AnalyticsConfig = {}) {
     this.config = {
-      googleAnalyticsId: config.googleAnalyticsId || 'G-XXXXXXXXXX', // Placeholder - remove analytics for now
+      googleAnalyticsId: config.googleAnalyticsId || 'G-H9GCB42G9C',
       facebookPixelId: config.facebookPixelId || 'YOUR_FACEBOOK_PIXEL_ID',
       hotjarId: config.hotjarId || undefined,
       enableDebug: config.enableDebug || false,

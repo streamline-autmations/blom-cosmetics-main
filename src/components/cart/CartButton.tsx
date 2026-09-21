@@ -8,7 +8,7 @@ interface CartButtonProps {
 }
 
 export const CartButton: React.FC<CartButtonProps> = ({ onClick, className = '' }) => {
-  const [cartState, setCartState] = useState<CartState>(cartStore.getState());
+  const [, setCartState] = useState<CartState>(cartStore.getState());
   const [itemCount, setItemCount] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
 
@@ -34,13 +34,14 @@ export const CartButton: React.FC<CartButtonProps> = ({ onClick, className = '' 
 
   return (
     <button
-      onClick={(e) => {
+      onClick={() => {
         if (onClick) return onClick();
         // Fallback: open the global cart drawer if present
         const trigger = document.getElementById('cart-drawer-trigger');
         if (trigger) (trigger as HTMLDivElement).click();
       }}
       className={`p-2.5 text-gray-700 hover:text-pink-400 transition-all duration-200 relative ${className}`}
+      aria-label="Open cart"
     >
       <ShoppingCart
         className={`h-6 w-6 transition-all duration-200 ${

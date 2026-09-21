@@ -78,6 +78,7 @@ export const Header: React.FC<HeaderProps> = ({ showMobileMenu = false }) => {
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 className="lg:hidden p-2 text-gray-700 hover:text-pink-600"
+                aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
                 aria-expanded={isMobileMenuOpen}
                 aria-controls="mobile-menu"
               >
@@ -96,9 +97,11 @@ export const Header: React.FC<HeaderProps> = ({ showMobileMenu = false }) => {
                   <span className="tracking-[0.16em] text-[1.05rem] font-extrabold">BLOM</span>
                 ) : (
                   <img
-                    src="/blom_logo.webp"
+                    src="/blom_logo-256.webp"
                     alt="BLOM Cosmetics"
-                    className="h-12 md:h-10"
+                    width={256}
+                    height={144}
+                    className="h-12 md:h-10 w-auto"
                     onError={() => setLogoFailed(true)}
                   />
                 )}

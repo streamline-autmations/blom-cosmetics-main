@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Header } from '../components/layout/Header';
 import { Footer } from '../components/layout/Footer';
@@ -34,7 +34,7 @@ export default function OrderDetailPage() {
   const orderId = id || '';
   const [order, setOrder] = useState<Order | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [, setError] = useState<string | null>(null);
 
   useEffect(() => {
     document.title = `Order ${orderId} - BLOM Cosmetics`;
@@ -44,7 +44,7 @@ export default function OrderDetailPage() {
       
       try {
         // Fetch all financial fields
-        let { data: orderData, error: orderError } = await supabase
+        const { data: orderData, error: orderError } = await supabase
           .from('orders')
           .select(`
             *,

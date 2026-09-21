@@ -19,6 +19,16 @@ export default tseslint.config(
     },
     rules: {
       ...reactHooks.configs.recommended.rules,
+      // `_`-prefixed bindings are the project's marker for a deliberately unused
+      // value; `ignoreRestSiblings` allows the `const { drop, ...rest }` idiom.
+      '@typescript-eslint/no-unused-vars': ['error', {
+        argsIgnorePattern: '^_',
+        varsIgnorePattern: '^_',
+        caughtErrorsIgnorePattern: '^_',
+        ignoreRestSiblings: true,
+      }],
+      // Only flag a destructuring pattern when none of its bindings are reassigned.
+      'prefer-const': ['error', { destructuring: 'all' }],
       'react-refresh/only-export-components': [
         'warn',
         { allowConstantExport: true },

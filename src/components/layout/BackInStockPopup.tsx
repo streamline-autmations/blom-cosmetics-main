@@ -48,7 +48,7 @@ export const BackInStockPopup: React.FC = () => {
         localStorage.setItem(VISITS_KEY, String(visits));
         sessionStorage.setItem(SESSION_KEY, '1');
       }
-    } catch {}
+    } catch { /* storage unavailable (private mode / quota) — popup timing is best-effort */ }
 
     // Not due yet — skip.
     if (visits < showAt) return;
@@ -57,7 +57,7 @@ export const BackInStockPopup: React.FC = () => {
     if (typeof window !== 'undefined' && window.__blomSignup?.hasShown) return;
 
     // Schedule the next appearance 3–5 visits out so it won't re-open again this session.
-    try { localStorage.setItem(SHOW_AT_KEY, String(visits + nextInterval())); } catch {}
+    try { localStorage.setItem(SHOW_AT_KEY, String(visits + nextInterval())); } catch { /* storage unavailable (private mode / quota) — popup timing is best-effort */ }
 
     // Don't collide with the Beauty Club popup this visit.
     if (typeof window !== 'undefined') {

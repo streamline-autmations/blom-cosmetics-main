@@ -1,5 +1,5 @@
 import React from 'react';
-import { Heart, ShoppingCart, Plus } from 'lucide-react';
+import { Heart, Plus } from 'lucide-react';
 import { cartStore, showNotification } from '../lib/cart';
 import { wishlistStore } from '../lib/wishlist';
 import { OptimizedImage } from './seo/OptimizedImage';
@@ -42,7 +42,6 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   badges = [], 
   className = '', 
   isListView = false, 
-  hoverShine = false,
   hideDescription = false,
   displayVariant = 'default',
   variants = [],
@@ -146,6 +145,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           <div className="flex flex-col gap-2">
             <button
               onClick={handleWishlistToggle}
+              aria-label={isWishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
               className={`p-2 rounded-full transition-colors self-end ${isWishlisted ? 'text-pink-500 bg-pink-50' : 'text-gray-400 hover:bg-gray-100'}`}
             >
               <Heart className={`w-5 h-5 ${isWishlisted ? 'fill-current' : ''}`} />
@@ -210,6 +210,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 
             <button
               onClick={handleWishlistToggle}
+              aria-label={isWishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
               className="absolute top-2 right-2 p-1.5 rounded-full bg-white/90 backdrop-blur-sm shadow-sm hover:bg-white transition-all z-10"
             >
               <Heart className={`w-4 h-4 ${isWishlisted ? 'fill-pink-500 text-pink-500' : 'text-gray-600'}`} />
@@ -291,6 +292,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           {/* Wishlist Button */}
           <button
             onClick={handleWishlistToggle}
+            aria-label={isWishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
             className="absolute top-3 right-3 p-2 rounded-full bg-white/90 backdrop-blur-sm shadow-sm hover:bg-white hover:scale-110 transition-all z-10"
           >
             <Heart className={`w-4 h-4 ${isWishlisted ? 'fill-pink-500 text-pink-500' : 'text-gray-600'}`} />

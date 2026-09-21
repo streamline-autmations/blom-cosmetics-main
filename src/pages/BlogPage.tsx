@@ -7,22 +7,19 @@ import { Button } from '../components/ui/Button';
 import { queries, BlogPost } from '../lib/supabase';
 import { ShareButton } from '../components/ui/ShareButton';
 import { pageSEO, trackPageView, updateSEO } from '../lib/seo';
-import { 
-  Calendar, 
-  Clock, 
-  User, 
-  Tag, 
+import {
+  Calendar,
+  Clock,
   Search,
   TrendingUp,
   BookOpen,
   Heart,
-  Share2,
   Eye
 } from 'lucide-react';
 
 export const BlogPage: React.FC = () => {
-  const [posts, setPosts] = useState<BlogPost[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [, setPosts] = useState<BlogPost[]>([]);
+  const [, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedTag, setSelectedTag] = useState<string>('all');
 
@@ -186,10 +183,10 @@ export const BlogPage: React.FC = () => {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          const shimmerElement = entry.target.querySelector('.shimmer');
+          const shimmerElement = entry.target.querySelector<HTMLElement>('.shimmer');
           if (shimmerElement && !shimmerElement.classList.contains('shimmer-on-scroll')) {
             // Make container visible first
-            const shimmerContainer = entry.target.querySelector('.absolute.inset-0');
+            const shimmerContainer = entry.target.querySelector<HTMLElement>('.absolute.inset-0');
             if (shimmerContainer) {
               shimmerContainer.style.opacity = '1';
               shimmerContainer.style.pointerEvents = 'none';
@@ -206,10 +203,10 @@ export const BlogPage: React.FC = () => {
           }
         } else {
           // When element goes out of view, reset for re-triggering
-          const shimmerElement = entry.target.querySelector('.shimmer');
+          const shimmerElement = entry.target.querySelector<HTMLElement>('.shimmer');
           if (shimmerElement) {
             shimmerElement.classList.remove('shimmer-on-scroll');
-            const shimmerContainer = entry.target.querySelector('.absolute.inset-0');
+            const shimmerContainer = entry.target.querySelector<HTMLElement>('.absolute.inset-0');
             if (shimmerContainer) {
               shimmerContainer.style.opacity = '0';
             }

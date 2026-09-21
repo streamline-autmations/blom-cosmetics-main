@@ -1,9 +1,10 @@
 import React, { Suspense, lazy } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { CartWidget } from './components/cart/CartWidget';
 import ErrorBoundary from './components/ErrorBoundary';
 import { LoadingSpinner } from './components/LoadingSpinner';
 import { DevFlagListener } from './components/DevFlagListener';
+import { captureAffiliateRef } from './lib/affiliate';
 
 // Eager loaded pages (critical for initial load) → switch to lazy to enable route-level code splitting
 const HomePage = lazy(() => import('./pages/HomePage').then(m => ({ default: m.HomePage })));
@@ -41,6 +42,7 @@ const MyCoupons = lazy(() => import('./pages/MyCoupons'));
 const ManageAddresses = lazy(() => import('./pages/ManageAddresses'));
 const StockMovementPage = lazy(() => import('./pages/StockMovementPage'));
 const CourseOfferClaimPage = lazy(() => import('./pages/CourseOfferClaimPage').then(m => ({ default: m.CourseOfferClaimPage })));
+const PartnerPortalPage = lazy(() => import('./pages/PartnerPortalPage').then(m => ({ default: m.PartnerPortalPage })));
 
 /**
  * Prefetch next likely routes on idle to improve perceived performance.
@@ -72,11 +74,20 @@ const PageWithCart = ({ children }: { children: React.ReactNode }) => (
   </>
 );
 
+const AffiliateTracker: React.FC = () => {
+  const location = useLocation();
+  React.useEffect(() => {
+    captureAffiliateRef();
+  }, [location.pathname, location.search]);
+  return null;
+};
+
 function App() {
   return (
     <BrowserRouter>
       <ErrorBoundary>
         <DevFlagListener />
+        <AffiliateTracker />
         <PrefetchRoutes />
         <Routes>
           {/* Homepage */}
@@ -135,6 +146,11 @@ function App() {
           <Route path="/order-confirmation" element={<PageWithCart><OrderConfirmationPage /></PageWithCart>} />
           <Route path="/track-order" element={<TrackOrderPage />} />
           <Route path="/invoice" element={<InvoiceViewer />} />
+          {/* Partner portal: no storefront chrome or cart — it is a business tool. */}
+          <Route
+            path="/partners"
+            element={<Suspense fallback={<LoadingSpinner />}><PartnerPortalPage /></Suspense>}
+          />
           
           {/* Wishlist */}
           <Route path="/wishlist" element={<PageWithCart><WishlistPage /></PageWithCart>} />

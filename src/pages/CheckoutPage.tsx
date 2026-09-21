@@ -20,6 +20,7 @@ import {
   amountToFreeShipping,
 } from '../lib/shipping';
 import { ProductVariantModal } from '../components/product/ProductVariantModal';
+import { getAffiliateRef } from '../lib/affiliate';
 import {
   CatalogProduct,
   RecommendedProduct,
@@ -777,6 +778,7 @@ export const CheckoutPage: React.FC = () => {
         },
         body: JSON.stringify({
           m_payment_id: clientPaymentId,
+          affiliate_ref: getAffiliateRef(),
           buyer: {
             email: shippingInfo.email,
             name: `${shippingInfo.firstName} ${shippingInfo.lastName}`.trim(),

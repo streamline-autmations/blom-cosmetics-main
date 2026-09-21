@@ -24,7 +24,9 @@ export const handler: Handler = async (event) => {
   }
 
   const q = event.queryStringParameters || {};
-  const days = Math.min(Math.max(Number(q.days) || 7, 1), 30);
+  // The hourly cron only needs a few days, but an audit has to reach orders
+  // older than a month: anything past the ceiling was never checked at all.
+  const days = Math.min(Math.max(Number(q.days) || 7, 1), 400);
   const dryRun = q.dryRun === '1' || q.dryRun === 'true';
   const notify = q.notify !== '0' && q.notify !== 'false';
 

@@ -4,6 +4,7 @@ import { useLocation } from 'react-router-dom';
 import { Header } from '../components/layout/Header';
 import { Footer } from '../components/layout/Footer';
 import { Container } from '../components/layout/Container';
+import { isBundleInStock } from '../lib/stockAvailability';
 import { ProductCard } from '../components/ProductCard';
 import { Search, Grid3x3 as Grid3X3, Grid2x2 as Grid2X2, ChevronDown, ChevronUp, X, Square } from 'lucide-react';
 import { PageLoadingSpinner } from '../components/ui/LoadingSpinner';
@@ -315,6 +316,7 @@ export const ShopPage: React.FC = () => {
           };
         });
 
+        const productsById = productsError ? null : new Map((products || []).map((p: any) => [String(p.id), p]));
         const mappedBundles = (bundles || []).map((bundle: any) => ({
             id: `bundle-${bundle.id}`,
             name: bundle.name,
@@ -322,8 +324,8 @@ export const ShopPage: React.FC = () => {
             categories: ['bundle-deals'],
             price: bundle.price_cents ? bundle.price_cents / 100 : (bundle.price || 0),
             compareAtPrice: bundle.compare_at_price_cents ? bundle.compare_at_price_cents / 100 : bundle.compare_at_price || null,
-            stock: 1,
-            inStock: true,
+            stock: bundle.stock ?? 1,
+            inStock: isBundleInStock(bundle, productsById),
             shortDescription: bundle.short_desc || '',
             description: bundle.long_desc || '',
             images: Array.isArray(bundle.images) ? bundle.images : [bundle.image_url].filter(Boolean),

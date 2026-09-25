@@ -23,6 +23,7 @@ import {
 } from 'lucide-react';
 import { useToast } from '../components/ui/use-toast';
 import { ProductCard } from '../components/ProductCard';
+import { isBundleInStock } from '../lib/stockAvailability';
 import { PaymentMethods } from '../components/payment/PaymentMethods';
 
 const numericStock = (value: unknown): number | null => {
@@ -319,11 +320,16 @@ export const ProductDetailPage: React.FC = () => {
             if (componentIds.length > 0) {
               const { data: components } = await supabase
                 .from('products')
-                .select('id, name, slug, thumbnail_url, image_url, price, price_cents')
+                .select('id, name, slug, thumbnail_url, image_url, price, price_cents, status, is_active, out_of_stock, stock, stock_qty, stock_on_hand, inventory_quantity')
                 .in('id', componentIds);
 
               // Preserve the bundle's ordering and attach quantity from bundle_products
               const byId = new Map((components || []).map((c: any) => [c.id, c]));
+
+              // A bundle is sold out as soon as any product inside it is sold out.
+              if (components && !isBundleInStock(resolvedProductData, new Map(components.map((c: any) => [String(c.id), c])))) {
+                setProduct((prev: any) => prev ? { ...prev, out_of_stock: true } : prev);
+              }
               const resolved = resolvedProductData.bundle_products
                 .map((bp: any) => {
                   const c = byId.get(bp.product_id);

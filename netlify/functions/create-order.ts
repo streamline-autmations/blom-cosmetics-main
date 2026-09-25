@@ -12,6 +12,7 @@ import {
 import { standardShippingCentsFor } from '../../src/lib/shipping'
 import { resolveAttribution } from './_lib/affiliate'
 import crypto from 'crypto'
+import { isBundleInStock } from '../../src/lib/stockAvailability'
 
 export const handler: Handler = async (event) => {
   try {
@@ -104,7 +105,7 @@ export const handler: Handler = async (event) => {
       fetch(`${SUPABASE_URL}/rest/v1/products?select=id,name,slug,sku,price,price_cents,category,subcategory,status,is_active,out_of_stock,stock,stock_qty,stock_on_hand,inventory_quantity,variants`, {
         headers: { apikey: SERVICE_KEY, Authorization: `Bearer ${SERVICE_KEY}` }
       }),
-      fetch(`${SUPABASE_URL}/rest/v1/bundles?select=id,name,slug,sku,price_cents,status,is_active`, {
+      fetch(`${SUPABASE_URL}/rest/v1/bundles?select=id,name,slug,sku,price_cents,status,is_active,stock,bundle_products`, {
         headers: { apikey: SERVICE_KEY, Authorization: `Bearer ${SERVICE_KEY}` }
       })
     ]);
@@ -113,10 +114,15 @@ export const handler: Handler = async (event) => {
 
     // Normalize bundles into the same shape as products so downstream stock/price/variant
     // logic (isProductOutOfStock, getCanonicalPriceCents, etc.) works unchanged.
+    // A bundle can't be sold if any product inside it is sold out (shared rule with the storefront).
+    // Fail closed: if products didn't load, the empty map marks every multi-product bundle sold out.
+    const productRowsById = new Map<string, any>(dbProductRows.map((p: any) => [String(p.id), p]));
     const normalizedBundles = dbBundleRows.map((b: any) => ({
       ...b,
       category: 'bundle-deals',
-      out_of_stock: b.is_active === false || (b.status && b.status !== 'active' && b.status !== 'published'),
+      out_of_stock: b.is_active === false ||
+        (b.status && b.status !== 'active' && b.status !== 'published') ||
+        !isBundleInStock(b, productRowsById),
       variants: [],
       // order_items.product_id has a FK to products(id). Bundle ids only exist in
       // `bundles`, so they must never be written to that column — see is_bundle use below.

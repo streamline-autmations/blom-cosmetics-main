@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Maximize2, X } from 'lucide-react';
 import { Container } from './Container';
 import { CAT_EYE_DESKTOP_IMAGE } from '../../lib/catEyeAssets';
+import { useCatEyeSpecials } from './CatEyeSpecialsPopup';
 
 // Permanent shop-page reinforcement for the Nude Cat Eye Collection —
 // CatEyeSpecialsPopup only shows once per session, so this slim strip keeps
@@ -9,9 +10,20 @@ import { CAT_EYE_DESKTOP_IMAGE } from '../../lib/catEyeAssets';
 // the popup's palette/pill/serif treatment so it reads as the same promo,
 // not a competing one. Opens the full promo image in a lightbox rather than
 // navigating, since the collection is already one tap away via the popup.
+// Where each special's price block sits in the promo artwork (same order as the popup's
+// specials), so a sold-out special can be stamped over directly.
+const ARTWORK_SPECIAL_COLUMNS: React.CSSProperties[] = [
+  { left: '5%', width: '30%' },
+  { left: '36%', width: '30%' },
+  { left: '67%', width: '30%' },
+];
+
 export const CatEyeShopBanner: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const closeButtonRef = useRef<HTMLButtonElement | null>(null);
+  // The promo artwork has the specials baked in, so sold-out ones are called out beside it.
+  const specials = useCatEyeSpecials();
+  const soldOutSpecials = specials.filter((special) => special.soldOut);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -86,11 +98,32 @@ export const CatEyeShopBanner: React.FC = () => {
             >
               <X className="h-5 w-5" />
             </button>
-            <img
-              src={CAT_EYE_DESKTOP_IMAGE}
-              alt="Nude Cat Eye Collection"
-              className="max-h-[90vh] w-auto rounded-2xl object-contain shadow-[0_28px_90px_rgba(90,55,35,0.35)]"
-            />
+            <div className="relative">
+              <img
+                src={CAT_EYE_DESKTOP_IMAGE}
+                alt="Nude Cat Eye Collection"
+                className={`${soldOutSpecials.length > 0 ? 'max-h-[80vh]' : 'max-h-[90vh]'} w-auto rounded-2xl object-contain shadow-[0_28px_90px_rgba(90,55,35,0.35)]`}
+              />
+              {specials.map((special, index) =>
+                special.soldOut && ARTWORK_SPECIAL_COLUMNS[index] ? (
+                  <span
+                    key={special.label}
+                    aria-hidden="true"
+                    style={ARTWORK_SPECIAL_COLUMNS[index]}
+                    className="absolute top-[69%] flex h-[11%] items-center justify-center rounded-lg bg-[#fffaf5]/85"
+                  >
+                    <span className="-rotate-6 rounded-md border-2 border-[#3f2a22] px-2 py-0.5 text-[11px] font-black uppercase tracking-widest text-[#3f2a22] sm:text-sm">
+                      Sold out
+                    </span>
+                  </span>
+                ) : null
+              )}
+            </div>
+            {soldOutSpecials.length > 0 && (
+              <p className="mx-auto mt-3 w-fit rounded-full bg-[#3f2a22] px-4 py-2 text-center text-xs font-semibold text-white">
+                Sold out: {soldOutSpecials.map((special) => special.label).join(', ')}
+              </p>
+            )}
           </div>
         </div>
       )}

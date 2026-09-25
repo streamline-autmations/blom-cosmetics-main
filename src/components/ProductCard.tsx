@@ -110,6 +110,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 
   const formatPrice = (p: number) => `R${p.toFixed(2)}`;
 
+  // Sold-out items get a badge on the image so it reads at a glance in every grid size.
+  const displayBadges = inStock || price === -1
+    ? badges
+    : ['Sold Out', ...badges.filter((badge) => badge.toLowerCase() !== 'sold out')];
+
   // --- LIST VIEW (Kept simple for consistency) ---
   if (isListView) {
     return (
@@ -201,7 +206,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             />
 
             <div className="absolute top-2 left-2 flex flex-col gap-1 z-10">
-              {badges.map((badge) => (
+              {displayBadges.map((badge) => (
                 <span key={badge} className="bg-black/90 backdrop-blur-md text-white text-[9px] font-bold uppercase tracking-wider px-2 py-1 rounded-md shadow-sm">
                   {badge}
                 </span>
@@ -282,7 +287,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           
           {/* Badges */}
           <div className="absolute top-3 left-3 flex flex-col gap-1 z-10">
-            {badges.map((badge) => (
+            {displayBadges.map((badge) => (
               <span key={badge} className="bg-black/90 backdrop-blur-md text-white text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-md shadow-sm">
                 {badge}
               </span>

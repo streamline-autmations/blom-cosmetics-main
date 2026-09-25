@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { ArrowRight, X } from 'lucide-react';
 import { CAT_EYE_MOBILE_IMAGE, CAT_EYE_DESKTOP_IMAGE } from '../../lib/catEyeAssets';
+import { useBundleStock, type BundleStock } from '../../hooks/useBundleStock';
 
 // Nude Cat Eye Collection launch popup — promotes the 3 specials (fixed 6-item
 // bundle, capped buy-2, fixed 5-item bundle). Unlike WomensDayPopup/
@@ -15,24 +16,34 @@ const SHOW_DELAY_MS = 3000;
 const MOBILE_IMAGE = CAT_EYE_MOBILE_IMAGE;
 const DESKTOP_IMAGE = CAT_EYE_DESKTOP_IMAGE;
 
+// Sold-out state is read live from the bundles (and the products inside them), so a
+// special flips to "Sold out" by itself when any of its products sells out.
+const FULL_COLLECTION_SLUG = 'nude-cat-eye-collection-top-coat';
+const FIVE_COLOUR_SLUG = 'nude-cat-eye-5-color-bundle';
+const BUNDLE_SLUGS = [FULL_COLLECTION_SLUG, FIVE_COLOUR_SLUG];
+const COUNT_WORDS = ['', 'One way', 'Two ways', 'Three ways'];
+
 const SPECIALS = [
   {
     label: 'Full Collection + Top Coat',
     detail: 'All 5 shades plus the Cat Eye Top Coat',
     price: 'R972',
     was: 'R1080',
+    bundleSlug: FULL_COLLECTION_SLUG,
   },
   {
     label: 'Any 2 Colours',
     detail: 'Mix and match any 2 of the 5 shades',
     price: 'R340',
     was: null,
+    bundleSlug: null,
   },
   {
     label: '5-Colour Bundle',
     detail: 'All 5 shades, Top Coat not included',
     price: 'R860',
     was: null,
+    bundleSlug: FIVE_COLOUR_SLUG,
   },
 ];
 
@@ -47,10 +58,31 @@ const readInt = (key: string, fallback: number): number => {
 
 const nextInterval = (): number => 3 + Math.floor(Math.random() * 3);
 
+// "Any 2 Colours" isn't a bundle row — it needs at least 2 of the 5 shades in stock.
+export const isCatEyeSpecialSoldOut = (
+  bundleSlug: string | null,
+  stock: Record<string, BundleStock> | null
+): boolean => {
+  if (!stock) return false;
+  if (bundleSlug) return stock[bundleSlug] ? !stock[bundleSlug].inStock : false;
+  const shades = stock[FIVE_COLOUR_SLUG];
+  return shades ? shades.componentsInStock < 2 : false;
+};
+
+export const useCatEyeSpecials = () => {
+  const stock = useBundleStock(BUNDLE_SLUGS);
+  return SPECIALS.map((special) => ({
+    ...special,
+    soldOut: isCatEyeSpecialSoldOut(special.bundleSlug, stock),
+  }));
+};
+
 export const CatEyeSpecialsPopup: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const timerRef = useRef<number | null>(null);
   const closeButtonRef = useRef<HTMLButtonElement | null>(null);
+  const specials = useCatEyeSpecials();
+  const availableCount = specials.filter((special) => !special.soldOut).length;
 
   useEffect(() => {
     let visits = readInt(VISITS_KEY, 0);
@@ -161,26 +193,36 @@ export const CatEyeSpecialsPopup: React.FC = () => {
             id="cateye-specials-popup-title"
             className="mt-2 font-serif text-2xl leading-[1.1] text-[#3f2a22] sm:text-3xl"
           >
-            Five new shades. Three ways to save.
+            Five new shades.{availableCount > 0 && ` ${COUNT_WORDS[availableCount]} to save.`}
           </h2>
           <p className="mt-3 text-sm leading-6 text-[#6e5548] sm:text-base">
             Soft rose-gold shimmer, one non-magnetic surprise, and a special for however you like to shop.
           </p>
 
           <div className="mt-5 space-y-2.5">
-            {SPECIALS.map((special) => (
+            {specials.map((special) => (
               <div
                 key={special.label}
-                className="flex items-center justify-between gap-3 rounded-2xl border border-[#ecdccb] bg-white px-4 py-3"
+                className={`flex items-center justify-between gap-3 rounded-2xl border border-[#ecdccb] px-4 py-3 ${
+                  special.soldOut ? 'bg-[#f7efe8]' : 'bg-white'
+                }`}
               >
-                <div>
+                <div className={special.soldOut ? 'opacity-60' : undefined}>
                   <p className="text-sm font-bold text-[#3f2a22]">{special.label}</p>
                   <p className="text-xs text-[#8a7062]">{special.detail}</p>
                 </div>
                 <div className="shrink-0 text-right">
-                  <p className="text-base font-bold text-[#3f2a22]">{special.price}</p>
-                  {special.was && (
-                    <p className="text-xs text-[#b3a091] line-through">{special.was}</p>
+                  {special.soldOut ? (
+                    <span className="inline-flex rounded-full bg-[#3f2a22] px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-white">
+                      Sold out
+                    </span>
+                  ) : (
+                    <>
+                      <p className="text-base font-bold text-[#3f2a22]">{special.price}</p>
+                      {special.was && (
+                        <p className="text-xs text-[#b3a091] line-through">{special.was}</p>
+                      )}
+                    </>
                   )}
                 </div>
               </div>
